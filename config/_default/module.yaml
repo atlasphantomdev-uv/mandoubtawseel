@@ -10,6 +10,25 @@ imports:
 
 # Install any Hugo Blox within the `hugo-blox/blox/` folder
 mounts:
+  # Language-scoped content mounts. REQUIRED: without these Hugo adds a single unscoped
+  # `content -> content` mount, so every language renders every content dir — verified in a
+  # real build: the English starter docs/blog/showcase leaked into the Arabic root and the
+  # Arabic اتصل-بنا leaked into /en/.
+  #
+  # `lang:` was removed in Hugo 0.153; the current key is `sites.matrix.languages`
+  # (https://gohugo.io/configuration/module/#mounts). Declaring a `content` mount here also
+  # removes the default content mount, which is why no legacy `contentDir` is set in
+  # languages.yaml (the docs forbid mixing mounts with contentDir).
+  - source: content/ar
+    target: content
+    sites:
+      matrix:
+        languages: [ar]
+  - source: content/en
+    target: content
+    sites:
+      matrix:
+        languages: [en]
   - source: hugo-blox/blox/community
     target: layouts/_partials/blox/community/
     files:

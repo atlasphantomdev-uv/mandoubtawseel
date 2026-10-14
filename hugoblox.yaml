@@ -1,5 +1,9 @@
 build:
-  hugo_version: '0.162.0'
+  # Matches the version this site was actually built and verified with locally.
+  # The theme template default was 0.162.0, but 0.168.0 is what the CI pipeline
+  # must use to behave identically (config uses sites.matrix content mounts, which
+  # replaced the removed module.mounts.lang key, plus the 0.163+ imaging keys).
+  hugo_version: '0.168.0'
 deploy:
   # Deployment target: github-pages, netlify, vercel, cloudflare, or none
   host: 'github-pages'

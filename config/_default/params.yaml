@@ -13,19 +13,22 @@ hugoblox:
   # ────────────────────────────────────────────────────────────────────────────
   identity:
     # Site name - shown in navbar, footer, copyright, and browser title by default
-    name: "Your Name"
+    # TODO_BRAND: real business name (Arabic + English) required before go-live.
+    # Falls back into <title>, RSS feed title and footer.
+    name: "TODO_BRAND"
     # Legal entity for copyright notices (defaults to name if not set)
     organization: ""
-    # Schema.org type for structured data
-    type: person # person | organization | local_business
+    # Schema.org type for structured data — delivery courier business.
+    type: local_business # person | organization | local_business
     # Short tagline displayed on your site
-    tagline: ""
-    # Site meta description for search engines and social sharing
-    description: "The highly-customizable Hugo Academic theme powered by HugoBlox
-      Kit. Easily create your personal academic website."
+    tagline: "TODO_TAGLINE"
+    # Site meta description for search engines and social sharing.
+    # Per-language descriptions live in config/_default/languages.yaml; this is the fallback.
+    description: "Courier and delivery service (مندوب توصيل) across Dubai, Abu Dhabi,
+      Sharjah and all UAE emirates. Express and same-day delivery."
     # Social accounts (used for meta tags like Twitter Cards)
     social:
-      twitter: "GoOwnable" # Twitter/X handle for Twitter Cards (without @)
+      twitter: "" # TODO_BRAND_TWITTER — Twitter/X handle for Twitter Cards (without @)
 
   # ────────────────────────────────────────────────────────────────────────────
   # THEME
@@ -33,27 +36,32 @@ hugoblox:
   # ────────────────────────────────────────────────────────────────────────────
   theme:
     # Mode: 'light', 'dark', or 'system' (follows OS preference)
-    mode: system
+    # Locked to 'light' for the client light design system: dark is reserved for
+    # explicit high-impact sections (hero, final CTA) via design.background.text_color_light,
+    # never inherited from OS preference.
+    mode: light
     # Theme pack: name from data/themes/ or { light: "x", dark: "y" } for mix-and-match
     pack: "default"
-    # Optional: Override theme pack colors
+    # Brand tokens. Primary is a dark brand blue so the solid `primary-600` button
+    # keeps white text at >=4.5:1 (see contrast table); secondary is the reserved
+    # accent for Express / Same-Day service cards.
     colors:
-      primary: "" # Tailwind palette name or hex (e.g., "indigo" or "#6366f1")
-      secondary: ""
-      neutral: "" # Affects gray utilities (text-gray-*, bg-gray-*)
+      primary: "#1d4ed8" # dark brand blue (hex -> generated 50-950 scale)
+      secondary: "#0f766e" # deep teal accent
+      neutral: "gray" # affects gray utilities (text-gray-*, bg-gray-*)
     # Optional: Mode-specific color overrides
     colors_light: {}
     colors_dark: {}
-    # Optional: Semantic surface color overrides
+    # Semantic surface colors (light system).
     surfaces:
-      background: ""
-      foreground: ""
+      background: "#ffffff"
+      foreground: "#111827"
       header:
-        background: ""
-        foreground: ""
+        background: "#ffffff"
+        foreground: "#111827"
       footer:
-        background: ""
-        foreground: ""
+        background: "#f9fafb"
+        foreground: "#111827"
 
   # ────────────────────────────────────────────────────────────────────────────
   # TYPOGRAPHY

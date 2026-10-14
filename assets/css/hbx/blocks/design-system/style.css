@@ -1,0 +1,157 @@
+/*
+  MandoubTawseel — light design-system surface layer.
+
+  Stable semantic aliases for the client-approved surface palette. Page authors
+  set ONE of these per section via `design.css_class` (section surface) or
+  `design.background.css_class` (inner background layer) instead of repeating
+  utility strings across 20+ generated pages.
+
+  Plain CSS (not Tailwind `@utility`) on purpose: in this Hugo+Tailwind v4 build
+  `@source inline(...)` is inert (verified — module classes like `blur-2xl` are
+  dropped) and custom utilities are emitted on demand, so a `@utility` here would
+  vanish until some template happened to use it. Plain rules are always emitted.
+
+  ponytail: literal palette values, not var(--color-*) — Tailwind tree-shakes
+  unused theme vars, so var() refs could resolve to nothing. Values track
+  hugoblox.theme in config/_default/params.yaml; re-sync if the brand changes.
+
+  Contract (never two adjacent dark blocks):
+    hero / final CTA  -> surface-dark  + design.background.text_color_light: true
+    booking panel     -> surface-panel
+    service cards     -> surface-band
+    pricing           -> surface-page
+    steps             -> surface-page
+    reviews           -> surface-band
+    coverage / map    -> surface-page
+*/
+
+/* Page default — white page, dark heading text. */
+.surface-page {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+/* Raised panel on a light band: white card, thin neutral border, restrained shadow. */
+.surface-panel {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+/* Neutral alternating band. */
+.surface-band {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+/* Booking-form field: light input on the white panel. Border #6b7280 is the one
+   control boundary that must clear WCAG 1.4.11 (>=3:1 vs white -> 4.83:1). */
+.surface-field {
+  background-color: #ffffff;
+  border: 1px solid #6b7280;
+  border-radius: 0.5rem;
+  color: #111827;
+}
+
+/* High-impact dark moment (hero, final CTA). Pair with text_color_light: true. */
+.surface-dark {
+  background-color: #111827;
+  color: #ffffff;
+}
+
+/* Typography on light surfaces. */
+.text-heading {
+  color: #111827;
+}
+
+.text-body {
+  color: #4b5563;
+}
+
+/* Typography on dark sections. */
+.text-on-dark {
+  color: #ffffff;
+}
+
+.text-on-dark-muted {
+  color: #d1d5db;
+}
+
+/* Thin dividers between numbered steps / list rows. */
+.divider-line {
+  border-color: #e5e7eb;
+}
+
+/* Reserved subtle accent for the priority services only (Express, Same-Day). */
+.card-accent {
+  background-color: #f0fdfa;
+  border: 1px solid #99f6e4;
+}
+
+/* Restrained rating treatment for review stars. amber-600 clears 3:1 on the band
+   (module default amber-400 does not); stars are aria-hidden so this is graphic-only. */
+.rating-star {
+  color: #d97706;
+}
+
+/* ---------------------------------------------------------------------------
+   Service-card surface (client requirement: "white cards, thin neutral borders,
+   restrained shadows" for the ten-service section).
+
+   The blox `features` block renders NO card container at all — see
+   blox/features/component.jsx:14-46, FeatureCard is icon + title + text only.
+   It also ignores per-item `css_class`, and the section wrapper's widget class is
+   emitted as the broken literal `blox-_` (layouts/_partials/functions/parse_block_v3.html:313
+   with an empty $block_type), so the block cannot be targeted by widget name.
+   Scope instead by the `cards-paneled` class that page front matter puts on the
+   section:  design.css_class: "surface-band cards-paneled"
+   --------------------------------------------------------------------------- */
+.cards-paneled .grid > div {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: box-shadow 200ms ease;
+}
+
+.cards-paneled .grid > div:hover {
+  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 0.06);
+}
+
+/* The reserved accent, applied to Express + Same-Day ONLY.
+   ponytail: positional, because blox ignores per-item css_class. Indices follow the
+   service order in content/ar/_index.md (4 = توصيل فوري, 5 = توصيل نفس اليوم) — if that
+   order changes, update these two selectors. */
+.cards-paneled .grid > div:nth-child(4),
+.cards-paneled .grid > div:nth-child(5) {
+  background-color: #f0fdfa;
+  border-color: #99f6e4;
+}
+
+/* ---------------------------------------------------------------------------
+   Booking-form field boundary (WCAG 1.4.11).
+
+   The theme renders the contact-info inputs as `bg-gray-50 border border-gray-200`,
+   i.e. #e5e7eb — MEASURED 1.18:1 against its own #f9fafb field and 1.24:1 against the
+   white panel. A UI component boundary needs >=3:1, so both fail. #6b7280 measures
+   4.83:1 on white and 4.66:1 on #f9fafb.
+
+   Scoped by the section id the theme emits (`section-contact-info`, confirmed present in
+   the built HTML alongside section-hero/features/pricing/steps/testimonials/map/faq/cta-card)
+   because the contact-info block reads no per-field class. The id selector also outranks
+   the `border-gray-200` utility regardless of source order.
+   --------------------------------------------------------------------------- */
+#section-contact-info input:not([type="hidden"]),
+#section-contact-info textarea,
+#section-contact-info select {
+  background-color: #ffffff;
+  border-color: #6b7280;
+  color: #111827;
+}
+
+#section-contact-info input::placeholder,
+#section-contact-info textarea::placeholder {
+  color: #6b7280;
+}

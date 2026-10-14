@@ -5,48 +5,28 @@
 
 # Website name (set in params.yaml under hugoblox.branding.name)
 title: ''
-baseURL: 'https://example.com/' # Website URL
+baseURL: 'https://atlasphantomdev-uv.github.io/mandoubtawseel/' # GitHub Pages (CI overrides via configure-pages)
 
 ############################
 ## PAGE OPTIONS
 ############################
 
-cascade:
-  # Docs folder options
-  - target:
-      path: /docs/**
-    editable: true
-    show_breadcrumb: true
-    # Hide date from Next In Series
-    show_date: false
-    # Show date modified at end of content
-    show_date_updated: true
-  # Blog post options
-  - target:
-      path: /blog/**
-      kind: page
-    pager: true
-    editable: true
-    show_date: true
-    show_date_updated: true
-    reading_time: true
-    commentable: true
-    show_related: true
-    share: true
-    # Just use Breadcrumb for navigation on blog post pages?
-    show_breadcrumb: false
-    header:
-      navbar:
-        enable: true
+# No cascade rules: the starter's `/docs/**` and `/blog/**` cascades referenced the
+# demo content that was removed. The Arabic blog under /مدونة/** sets its own front
+# matter. Add per-section cascades here again only when a section needs shared defaults.
 
 ############################
 ## LANGUAGE
 ############################
 
-defaultContentLanguage: en
+defaultContentLanguage: ar
 hasCJKLanguage: false
 defaultContentLanguageInSubdir: false
-removePathAccents: true
+# MUST stay false: removePathAccents applies Unicode NFKD and strips the hamza
+# combining mark, silently rewriting Arabic filenames — وظائف -> وظايف (a misspelling),
+# أسعار -> اسعار. That desynchronises authored slugs, menus and internal links.
+# With it false the slug is exactly what the author wrote.
+removePathAccents: false
 
 ############################
 ## ADVANCED
@@ -63,7 +43,10 @@ enableRobotsTXT: true
 footnotereturnlinkcontents: <sup>^</sup>
 ignoreFiles: [".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 enableInlineShortcodes: true
-disableAliases: true
+# GitHub Pages cannot do server-side redirects, and disableAliases:true would drop
+# even the meta-refresh alias pages — which are the only way to serve the hamza
+# spelling variants (أبوظبي vs ابوظبي) on Pages. Must stay false.
+disableAliases: false
 outputs:
   home: [HTML, RSS, WebAppManifest, headers, redirects, backlinks]
   page: [HTML]
@@ -78,6 +61,13 @@ taxonomies:
   tag: tags
   category: categories
   author: authors
+
+# No content uses tags/categories/authors, so the taxonomy LIST pages were being
+# generated empty — three indexable thin pages (/tags/, /categories/, /authors/),
+# one of which was in the sitemap. Disable the list kind; the taxonomies stay declared
+# so theme partials that look them up keep working.
+disableKinds:
+  - taxonomy
 markup:
   _merge: deep
 related:
@@ -91,6 +81,15 @@ related:
       weight: 70
 security:
   _merge: deep
+  exec:
+    # Replaces the module's list (slices are not deep-merged) — keep all + tailwindcss
+    allow:
+      - ^(dart-)?sass$
+      - ^go$
+      - ^git$
+      - ^node$
+      - ^postcss$
+      - ^tailwindcss$
 sitemap:
   _merge: deep
 minify:

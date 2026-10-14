@@ -1,0 +1,137 @@
+{{/* Project override of blox `jsonld/main`. Emits ONE @graph per page so all
+     nodes cross-reference by @id instead of duplicating. Honesty rules:
+     business name/telephone/address/openingHours/priceRange are NOT in config,
+     so they are omitted rather than invented. Any value still carrying a
+     `TODO_` placeholder is dropped. DeliveryService is not a schema.org type
+     (https://schema.org/DeliveryService -> 404), so the business node is a
+     LocalBusiness and the offering is modelled as a Service. */}}
+{{- $page := .page -}}
+{{- $summary := .summary | default $page.Description | default ($page.Summary | plainify) -}}
+{{- $summary = $summary | plainify | strings.TrimSpace -}}
+
+{{- $siteURL := site.BaseURL -}}
+{{- $websiteID := printf "%s#website" $siteURL -}}
+{{- $businessID := printf "%s#business" $siteURL -}}
+
+{{/* Site name is a genuine placeholder until the business supplies it. */}}
+{{- $branding := partialCached "functions/get_branding" $page "branding" -}}
+{{- $name := $branding.name -}}
+{{- if or (eq $name "") (strings.Contains $name "TODO_") -}}{{- $name = "" -}}{{- end -}}
+{{- $logo := partial "functions/get_logo_url" $page -}}
+
+{{- $website := dict
+  "@type" "WebSite"
+  "@id" $websiteID
+  "url" $siteURL
+  "inLanguage" $page.Language.Locale
+-}}
+{{- with $name }}{{ $website = merge $website (dict "name" .) }}{{ end -}}
+
+{{/* Delivery business. Only config-sourceable facts: url, logo, areaServed. */}}
+{{- $business := dict
+  "@type" "LocalBusiness"
+  "@id" $businessID
+  "url" $siteURL
+  "logo" $logo
+  "areaServed" (dict "@type" "Country" "name" "United Arab Emirates")
+-}}
+
+{{- $areaServed := slice -}}
+{{- range (slice "أبوظبي" "دبي" "الشارقة" "عجمان" "أم القيوين" "رأس الخيمة" "الفجيرة") -}}
+  {{- $areaServed = $areaServed | append (dict "@type" "AdministrativeArea" "name" .) -}}
+{{- end -}}
+{{- $areaServed = $areaServed | append (dict "@type" "City" "name" "العين") -}}
+
+{{- $service := dict
+  "@type" "Service"
+  "@id" (printf "%s#service" $siteURL)
+  "serviceType" "Courier and delivery service"
+  "provider" (dict "@id" $businessID)
+  "areaServed" $areaServed
+  "availableLanguage" (slice "ar" "en")
+-}}
+
+{{- $webpage := dict
+  "@type" "WebPage"
+  "@id" $page.Permalink
+  "url" $page.Permalink
+  "name" ($page.LinkTitle | default $page.Title | plainify)
+  "inLanguage" $page.Language.Locale
+  "isPartOf" (dict "@id" $websiteID)
+-}}
+{{- with $summary }}{{ $webpage = merge $webpage (dict "description" .) }}{{ end -}}
+{{- if not $page.IsHome }}{{ $webpage = merge $webpage (dict "about" (dict "@id" $businessID)) }}{{ end -}}
+
+{{- $graph := slice $website $business $service $webpage -}}
+
+{{/* Article node for blog posts. */}}
+{{- if eq $page.Type "blog" -}}
+  {{- $post := dict
+    "@type" "BlogPosting"
+    "@id" (printf "%s#article" $page.Permalink)
+    "mainEntityOfPage" (dict "@id" $page.Permalink)
+    "headline" ($page.Title | plainify)
+    "inLanguage" $page.Language.Locale
+  -}}
+  {{- $author := partial "functions/get_author_name" $page -}}
+  {{- if and $author (not (strings.Contains $author "TODO_")) -}}
+    {{- $post = merge $post (dict "author" (dict "@type" "Person" "name" $author)) -}}
+  {{- end -}}
+  {{- if not $page.Date.IsZero }}{{ $post = merge $post (dict "datePublished" ($page.Date.Format "2006-01-02T15:04:05Z07:00")) }}{{ end -}}
+  {{- if not $page.Lastmod.IsZero }}{{ $post = merge $post (dict "dateModified" ($page.Lastmod.Format "2006-01-02T15:04:05Z07:00")) }}{{ end -}}
+  {{- with $summary }}{{ $post = merge $post (dict "description" .) }}{{ end -}}
+  {{- with partial "functions/get_featured_image" $page }}{{ $post = merge $post (dict "image" (slice .Permalink)) }}{{ end -}}
+  {{- $graph = $graph | append $post -}}
+{{- end -}}
+
+{{/* BreadcrumbList on non-home pages. */}}
+{{- if not $page.IsHome -}}
+  {{- $items := slice -}}
+  {{- $position := 1 -}}
+  {{- with site.Home -}}
+    {{- $home_title := .LinkTitle | default .Title | default "Home" -}}
+    {{- if strings.Contains $home_title "TODO_" -}}{{- $home_title = "Home" -}}{{- end -}}
+    {{- $items = $items | append (dict "@type" "ListItem" "position" $position "name" ($home_title | plainify) "item" (dict "@id" .Permalink "name" ($home_title | plainify))) -}}
+    {{- $position = add $position 1 -}}
+  {{- end -}}
+  {{- range $page.Ancestors.Reverse -}}
+    {{- if not .IsHome -}}
+      {{- $items = $items | append (dict "@type" "ListItem" "position" $position "name" (.LinkTitle | plainify) "item" (dict "@id" .Permalink "name" (.LinkTitle | plainify))) -}}
+      {{- $position = add $position 1 -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $items = $items | append (dict "@type" "ListItem" "position" $position "name" ($page.LinkTitle | default $page.Title | plainify) "item" (dict "@id" $page.Permalink "name" ($page.LinkTitle | default $page.Title | plainify))) -}}
+  {{- if gt (len $items) 1 -}}
+    {{- $graph = $graph | append (dict "@type" "BreadcrumbList" "@id" (printf "%s#breadcrumb" $page.Permalink) "itemListElement" $items) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* FAQPage from front matter: `faqs:` param and/or `sections[block=faq].content.items`.
+     Items whose question/answer still contain a TODO_ placeholder are omitted so
+     no placeholder text reaches structured data. */}}
+{{- $faq := slice -}}
+{{- with $page.Params.faqs -}}
+  {{- range . }}{{ $faq = $faq | append (dict "question" .question "answer" .answer) }}{{ end -}}
+{{- end -}}
+{{- range $page.Params.sections -}}
+  {{- if eq .block "faq" -}}
+    {{- with .content.items -}}
+      {{- range . }}{{ $faq = $faq | append (dict "question" .question "answer" .answer) }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $entities := slice -}}
+{{- range $faq -}}
+  {{- $q := .question | default "" -}}
+  {{- $a := .answer | default "" -}}
+  {{- if and (not (strings.Contains $q "TODO_")) (not (strings.Contains $a "TODO_")) -}}
+    {{- $entities = $entities | append (dict "@type" "Question" "name" $q "acceptedAnswer" (dict "@type" "Answer" "text" ($a | plainify))) -}}
+  {{- end -}}
+{{- end -}}
+{{- if $entities -}}
+  {{- $graph = $graph | append (dict "@type" "FAQPage" "@id" (printf "%s#faq" $page.Permalink) "mainEntity" $entities) -}}
+{{- end -}}
+
+<script type="application/ld+json">
+{{ dict "@context" "https://schema.org" "@graph" $graph | jsonify (dict "indent" "  ") | safeJS }}
+</script>

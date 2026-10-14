@@ -1,34 +1,28 @@
 # Navigation Links
 #   The weight parameter defines the order that the links will appear in.
+#
+# Top-level menus apply to the DEFAULT language (Arabic). The English menu is
+# defined under `languages.en.menu` in languages.yaml — do not duplicate it here.
 
 main:
-  - name: Home
+  - name: الرئيسية
     url: /
     weight: 10
-  - name: Documentation
-    url: docs/
+  - name: الخدمات
+    url: خدمات/
     weight: 20
-  - name: Blog
-    url: blog/
+  - name: مناطق التغطية
+    url: مناطق-التغطية/
     weight: 30
-  - name: Showcase
-    url: showcase/
+  - name: الأسعار
+    url: اسعار-مندوب-التوصيل/
     weight: 40
-  - name: Community
-    url: community/
+  - name: وظائف مندوب توصيل
+    url: وظائف-مندوب-توصيل/
     weight: 50
-
-sidebar:
-  - identifier: more
-    name: Still need help?
-    params:
-      type: separator
-    weight: 1
-  - identifier: community
-    name: "Community"
-    pageRef: "/community"
-    weight: 2
-  - identifier: hugoDocs
-    name: "Hugo Docs ↗"
-    url: "https://docs.hugoblox.com"
-    weight: 3
+  - name: المدونة
+    url: مدونة/
+    weight: 55
+  - name: اتصل بنا
+    url: اتصل-بنا/
+    weight: 60

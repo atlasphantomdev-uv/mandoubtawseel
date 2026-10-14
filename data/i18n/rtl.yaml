@@ -1,0 +1,11 @@
+# Right-to-left locales. Consumed by layouts/baseof.html:
+#   {{ if in hugo.Data.i18n.rtl.rtl $language_code }}dir="rtl"
+# Values must match each language's `locale:` in config/_default/languages.yaml
+# (site.Language.Locale), not the language key.
+rtl:
+  - ar
+  - ar-ae
+  - ar-sa
+  - ar-eg
+  - fa
+  - he

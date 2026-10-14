@@ -67,3 +67,30 @@ Desktop.ini
 
 *.log
 npm-debug.log*
+
+# Logs
+logs
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 
+
+# Verification screenshots captured during agent QA
+.verify-shots/
+
+# Agent/tooling state (not site code)
+.opencode/
+.taskmaster/

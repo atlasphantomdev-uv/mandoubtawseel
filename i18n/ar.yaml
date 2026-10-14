@@ -1,0 +1,80 @@
+# Arabic (ar-ae) UI string overrides.
+# The theme ships i18n/ar.yaml with 79 keys but 10 of them are still English —
+# translated here. Project i18n takes precedence over the module for same keys.
+# Source of the leak list: blox module i18n/ar.yaml.
+
+- id: home
+  translation: الرئيسية
+
+- id: close
+  translation: إغلاق
+
+- id: languages
+  translation: اللغات
+
+- id: theme_selector
+  translation: تفضيلات العرض
+
+- id: btn_copied
+  translation: تم النسخ
+
+- id: contact_attachment
+  translation: إرفاق ملف
+
+- id: slides
+  translation: الشرائح
+
+- id: authors
+  translation: الكتّاب
+
+- id: search_common_queries
+  translation: عمليات بحث شائعة
+
+- id: published_with
+  translation: صُنع بواسطة {hugoblox}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Contact / booking block. The theme's ar.yaml ships no translations for the
+# `block_contact_*` keys, so the Arabic contact page rendered English labels
+# (verified: "Send us a Message", "Name", "Office Hours").
+# Keys taken from blox/contact-info/block.html.
+# ─────────────────────────────────────────────────────────────────────────────
+
+- id: block_contact_title
+  translation: تواصل معنا
+
+- id: block_contact_connect_title
+  translation: اطلب مندوب توصيل الآن
+
+- id: block_contact_prospective_title
+  translation: للعملاء الجدد
+
+- id: block_contact_visit_title
+  translation: زورونا
+
+- id: block_contact_office_hours
+  translation: ساعات العمل
+
+- id: block_contact_view_on_map
+  translation: عرض الموقع على الخريطة
+
+- id: block_contact_follow_me
+  translation: تابعنا
+
+- id: block_contact_form_title
+  translation: احجز مندوب توصيل
+
+- id: block_contact_form_name
+  translation: الاسم الكامل
+
+- id: block_contact_form_email
+  translation: البريد الإلكتروني
+
+- id: block_contact_form_subject
+  translation: الموضوع
+
+- id: block_contact_form_message
+  translation: تفاصيل الطلب (نقطة الاستلام، التسليم، ونوع الشحنة)
+
+- id: block_contact_form_submit
+  translation: إرسال الطلب

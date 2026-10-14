@@ -1,22 +1,51 @@
 # Languages
 #   Create a section for each of your site's languages.
 #   Documentation: https://docs.hugoblox.com/reference/language/
+#
+# Arabic is the DEFAULT language and owns the site root (`/`).
+# English mirrors it under `/en/` for hreflang reciprocity only.
 
-# Default language
+# Default language — Arabic (Gulf)
+ar:
+  label: العربية
+  locale: ar-ae
+  weight: 1
+  title: TODO_BRAND_AR | مندوب توصيل في الإمارات
+  params:
+    # No price figure in the site-wide meta description: a TODO_ placeholder here would
+    # ship straight into the indexed SERP snippet. Page bodies carry TODO_PRICE instead.
+    description: خدمة مندوب توصيل في دبي وأبوظبي والشارقة وجميع الإمارات. توصيل فوري وبنفس
+      اليوم لجميع الإمارات.
+  # NOTE: the Arabic main menu lives in config/_default/menus.yaml (top level =
+  # default language). Do not duplicate it here.
+
+# Secondary language — English
 en:
+  label: English
   locale: en-us
-  # Uncomment for multi-lingual sites, and move English content into `en` sub-folder.
-  #contentDir: content/en
-
-# Uncomment the lines below to configure your website in a second language.
-#zh:
-#  locale: zh-Hans
-#  contentDir: content/zh
-#  title: Chinese website title...
-#  params:
-#    description: Site description in Chinese...
-#  menu:
-#    main:
-#      - name: 传
-#        url: '#about'
-#        weight: 1
+  weight: 2
+  title: TODO_BRAND_EN | Delivery Courier in the UAE
+  params:
+    # No price figure here — a TODO_ placeholder would ship into the indexed SERP snippet.
+    description: Courier and delivery service across Dubai, Abu Dhabi, Sharjah and
+      all UAE emirates. Express and same-day delivery for all emirates.
+  menu:
+    main:
+      - name: Home
+        url: ""
+        weight: 10
+      - name: Services
+        url: services/
+        weight: 20
+      - name: Coverage
+        url: coverage/
+        weight: 30
+      - name: Pricing
+        url: pricing/
+        weight: 40
+      - name: Jobs
+        url: jobs/
+        weight: 50
+      - name: Contact
+        url: contact/
+        weight: 60
