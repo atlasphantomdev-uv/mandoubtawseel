@@ -81,3 +81,22 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+
+    # IndexNow (Bing, Yandex, Seznam, Naver) — instant re-crawl of the changed pages.
+    # Key lives in static/<key>.txt; keyLocation serves it from the Pages sub-path.
+    # Non-blocking: a submission failure must never roll back a good deploy.
+    - name: Submit URLs to IndexNow
+      continue-on-error: true
+      run: |
+        BASE="https://atlasphantomdev-uv.github.io/mandoubtawseel"
+        KEY_FILE=$(ls static/*.txt | head -1)
+        KEY=$(basename "$KEY_FILE" .txt)
+        for path in "" "en/" "مندوب-توصيل-في-دبي/" "مندوب-توصيل-في-ابوظبي/" \
+                    "مندوب-توصيل-في-الشارقة/" "مندوب-توصيل-في-عجمان/" \
+                    "مندوب-توصيل-في-ام-القيوين/" "مندوب-توصيل-في-راس-الخيمة/" \
+                    "مندوب-توصيل-في-الفجيرة/" "مندوب-توصيل-في-العين/" \
+                    "خدمات/" "اسعار-مندوب-التوصيل/" "خطوط-التوصيل/" \
+                    "مناطق-التغطية/" "وظائف-مندوب-توصيل/" "مدونة/"; do
+          curl -sS --max-time 15 "https://api.indexnow.org/indexnow?url=${BASE}/${path}&key=${KEY}&keyLocation=${BASE}/${KEY}.txt" \
+            -o /dev/null -w "indexnow ${path:-/} %{http_code}\n" || true
+        done

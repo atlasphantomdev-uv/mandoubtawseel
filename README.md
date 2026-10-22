@@ -177,9 +177,10 @@ grep -rho "TODO_[A-Z_]*" content config | sort | uniq -c   # expect no output
    `https://atlasphantomdev-uv.github.io/mandoubtawseel/sitemap.xml`.
 2. **Bing Webmaster Tools** — import from GSC (`hugoblox.verification.bing`).
    Bing powers DuckDuckGo and ChatGPT search.
-3. **IndexNow** (Bing/Yandex/Seznam, instant re-crawl): drop the key file at
-   `static/<key>.txt`, then after each deploy
-   `curl -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json' -d '{"host":"atlasphantomdev-uv.github.io","key":"<key>","keyLocation":"https://atlasphantomdev-uv.github.io/mandoubtawseel/<key>.txt","urlList":["https://atlasphantomdev-uv.github.io/mandoubtawseel/"]}'`.
+3. **IndexNow — already automated.** `static/5bf46cfe551b44f7bd2570708a76b4ed.txt`
+   is the key; the deploy job pings IndexNow for the 16 priority URLs after every
+   successful Pages deploy. Rotate by replacing that file (name must equal its
+   content) — no workflow edit needed, the step globs `static/*.txt`.
 4. **Analytics** — `params.yaml → hugoblox.analytics.google.measurement_id` (GA4).
    Nothing loads until an ID is set.
 5. **Google Business Profile** — for a local courier the map pack outranks organic;
