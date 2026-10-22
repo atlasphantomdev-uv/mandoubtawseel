@@ -1,15 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Mandoub Tawseel">
   <defs>
-    <linearGradient id="mt-badge" x1="6" y1="2" x2="58" y2="62" gradientUnits="userSpaceOnUse">
+    <linearGradient id="mt-badge" x1="4" y1="0" x2="60" y2="64" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#1d4ed8"/>
       <stop offset="1" stop-color="#0f766e"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#mt-badge)"/>
-  <!-- M monogram: one continuous 6px stroke, round caps. Reads at 20px. -->
-  <path d="M16 46V22l16 16 16-16v24"
+  <!-- Badge: 64px grid, 15px radius, brand gradient (navy -> teal). -->
+  <rect width="64" height="64" rx="15" fill="url(#mt-badge)"/>
+  <!-- M monogram: one continuous 6px stroke, round caps, symmetric (19..45
+       around x=32), optical centre y=35. Reads at 16px in the tab bar and at
+       512px in the app icon; no detail below 3px survives, so there is none. -->
+  <path d="M19 45V25l13 12.5L45 25v20"
         fill="none" stroke="#ffffff" stroke-width="6"
         stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Motion tick: direction-neutral, identical in RTL and LTR -->
-  <path d="M10 52h12" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity=".7"/>
 </svg>

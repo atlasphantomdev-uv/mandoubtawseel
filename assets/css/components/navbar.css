@@ -40,6 +40,53 @@
   @apply cursor-pointer;
 }
 
+/* Mobile menu toggle.
+   Was `display:none` on the checkbox + a plain <label>: the label has no
+   tabindex, so the menu could not be opened without a pointer (WCAG 2.1.1).
+   The checkbox is now sr-only — still focusable, still toggled by Space — and
+   the label shows the focus ring. */
+input#nav-toggle:focus-visible + label {
+  outline: 3px solid var(--color-primary-600, #1d4ed8);
+  outline-offset: 3px;
+  border-radius: 0.375rem;
+}
+
+/* Glyph stays 24px; hit area is 44px (measured 24x24 before). */
+.navbar label[for="nav-toggle"] {
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+  margin-inline-end: -0.625rem;
+}
+
+/* Brand wordmark on phones.
+   Logo mark 28px + burger 44px + language toggle 161px overflows 375px, so the
+   header wrapped to two rows (MEASURED 108px tall on the home page vs 72px on
+   pages with no translation). Below 480px the mark alone carries the brand. */
+@media (max-width: 479.98px) {
+  .navbar-title {
+    display: none;
+  }
+}
+
+/* 1024–1199px: brand (212) + Arabic menu (636) + controls (153) + padding needs
+   1025px, so the desktop header wrapped to two rows at exactly 1024
+   (MEASURED header 122px). Tighten the menu rhythm instead of dropping the
+   wordmark; >=1200px has room for the theme's default spacing. */
+@media (min-width: 1024px) and (max-width: 1199.98px) {
+  #nav-menu > li {
+    margin-inline-start: 0;
+  }
+
+  #nav-menu > li + li {
+    margin-inline-start: 0.25rem;
+  }
+
+  #nav-menu .nav-link {
+    padding-inline: 0.25rem;
+  }
+}
+
 /* navbar toggler */
 input#nav-toggle:checked + label #show-button {
   @apply hidden;

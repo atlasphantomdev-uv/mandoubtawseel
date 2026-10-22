@@ -1,0 +1,72 @@
+/*
+  Arabic brand typeface, self-hosted.
+
+  Before this file, Arabic glyphs were rendered by whatever platform font the
+  OS supplied — MEASURED on the Arabic home page at 1280: h1/paragraph Arabic
+  runs resolved to "Geeza Pro" (macOS-only) while Latin runs used the bundled
+  Inter. Windows and Android would substitute a different Arabic face, so the
+  brand typography was effectively out of our control.
+
+  IBM Plex Sans Arabic (SIL OFL 1.1, static/fonts/OFL.txt) is one design across
+  Arabic + Latin, so numbers and Latin words inside Arabic sentences sit on the
+  same skeleton. Latin subset is deliberately not shipped: Inter already loads
+  on every page and covers U+0000-00FF, saving ~80 KB.
+
+  Variables are set on `html[dir="rtl"]` instead of `:root` because the theme
+  emits its `:root` token block in an inline <style> AFTER this stylesheet.
+  (0,1,1) beats (0,1,0), so no !important needed and /en/ typography is
+  untouched.
+*/
+
+@font-face {
+  font-family: "IBM Plex Sans Arabic";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/plex-arabic-400.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1,
+    U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF,
+    U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans Arabic";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/plex-arabic-600.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1,
+    U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF,
+    U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans Arabic";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/plex-arabic-700.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1,
+    U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF,
+    U+FE70-FE74, U+FE76-FEFC;
+}
+
+html[dir="rtl"] {
+  --hb-font-body: "IBM Plex Sans Arabic", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --hb-font-heading: "IBM Plex Sans Arabic", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --hb-font-nav: "IBM Plex Sans Arabic", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+  Phone numbers are LTR runs. The contact-info block prints them as a bare
+  paragraph inside an RTL document, so bidi reordered the leading "+" to the
+  end: MEASURED on /اتصل-بنا at 375 — rendered "971527890094+".
+  Isolate the number, leave the icon/flex order alone (the <a> is a flex row).
+*/
+a[href^="tel:"] p,
+a[href^="tel:"] span:not([aria-hidden]) {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: start;
+}
+

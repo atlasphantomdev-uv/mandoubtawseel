@@ -120,6 +120,15 @@
     {{ end }}
   {{ end }}
 
+  {{/* Web app manifest + brand chrome colour.
+       The manifest output format was already generated (outputs.home includes
+       WebAppManifest) but nothing linked it, so browsers never offered install
+       and the Android status bar kept the default colour. */}}
+  {{ with site.Home.OutputFormats.Get "WebAppManifest" }}
+    <link rel="manifest" href="{{ .RelPermalink }}" />
+  {{ end }}
+  <meta name="theme-color" content="#1d4ed8" />
+
   <link rel="canonical" href="{{ .Permalink }}" />
 
   {{/* Get page image for sharing. */}}
@@ -200,6 +209,13 @@
   {{ partial "jsonld/main" (dict "page" . "summary" $desc) }}
 
   <title>{{$title}}</title>
+
+  {{/* Arabic display weight, preloaded so the hero heading does not flash in
+       the platform Arabic fallback before swap (custom.css @font-face). */}}
+  {{ if in hugo.Data.i18n.rtl.rtl site.Language.Locale }}
+    <link rel="preload" as="font" type="font/woff2"
+          href="{{ "fonts/plex-arabic-600.woff2" | relURL }}" crossorigin="anonymous" />
+  {{ end }}
 
   {{/* Typography: font loading, font families, and sizes */}}
   {{ partial "functions/typography.html" $theme_config }}

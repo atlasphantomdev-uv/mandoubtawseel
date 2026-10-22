@@ -1,0 +1,34 @@
+{{- /*
+  PWA manifest override — Hugo template name is literally `index.webmanifest`
+  (the module ships that file with no extension; a `.json` suffix never matches).
+
+  The module version emitted `"src": "<no value>"` for both icons — it calls
+  `partial "functions/get_site_icon"` and takes `.RelPermalink` of the returned
+  dict — and hard-coded `theme_color: "#fff"`, so Android's task switcher and
+  status bar were white on a white app. Icon paths are now real resources
+  resized from assets/media/icon.png (512x512 source).
+*/ -}}
+{{- $icon := resources.Get "media/icon.png" -}}
+{{- $short := i18n "site_short_name" | default site.Params.hugoblox.identity.name -}}
+{{- $icons := slice -}}
+{{- with $icon -}}
+  {{- $i192 := .Resize "192x192 png" -}}
+  {{- $i512 := .Resize "512x512 png" -}}
+  {{- $icons = slice
+    (dict "src" $i192.RelPermalink "sizes" "192x192" "type" "image/png" "purpose" "any")
+    (dict "src" $i512.RelPermalink "sizes" "512x512" "type" "image/png" "purpose" "any") -}}
+{{- end -}}
+{{- $rtl := in hugo.Data.i18n.rtl.rtl site.Language.Locale -}}
+{{- $manifest := dict
+  "name" site.Title
+  "short_name" $short
+  "description" (site.Language.Params.description | default site.Params.hugoblox.identity.description)
+  "lang" site.Language.Locale
+  "dir" (cond $rtl "rtl" "ltr")
+  "start_url" site.Home.RelPermalink
+  "scope" site.Home.RelPermalink
+  "display" "standalone"
+  "background_color" "#ffffff"
+  "theme_color" "#1d4ed8"
+  "icons" $icons -}}
+{{- $manifest | jsonify (dict "indent" "  ") -}}

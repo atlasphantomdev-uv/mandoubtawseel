@@ -9,6 +9,15 @@
 - id: close
   translation: إغلاق
 
+# Screen-reader name for the mobile menu checkbox (navbar.html). The visible
+# hamburger glyph has no text of its own.
+- id: nav_menu
+  translation: القائمة
+
+# Home-screen label for the PWA manifest (layouts/_default/webappmanifest.json).
+- id: site_short_name
+  translation: مندوب توصيل
+
 - id: languages
   translation: اللغات
 
