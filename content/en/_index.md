@@ -19,7 +19,7 @@ sections:
   - block: hero
     content:
       eyebrow: Courier in the UAE
-      title: Courier in the UAE — [Express] & Same-Day Delivery
+      title: Courier in the UAE — [Express] & Same-Day Delivery
       text: >
         Delivery courier service in Dubai, Abu Dhabi, Sharjah and all UAE emirates.
         We pick up within minutes and deliver anywhere you are, with live tracking

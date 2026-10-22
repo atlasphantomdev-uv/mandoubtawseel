@@ -71,7 +71,8 @@ Requirements: **Hugo extended 0.168.0** (extended is mandatory — the theme cal
 | `config/_default/` | `hugo.yaml` (languages, sitemap, security), `languages.yaml`, `menus.yaml`, `params.yaml` (brand, SEO, analytics, verification) |
 | `content/ar/`, `content/en/` | Page bundles; landing pages are front-matter block lists |
 | `layouts/` | Project overrides of Blox partials (`baseof.html`, `landing_page.html`, `blox/preact-wrapper.html`, `jsonld/main.html`, `site_head.html`, `components/coverage-links.html`) |
-| `assets/css/`, `assets/js/` | Design-system CSS and the map block (RTL corrections, sub-path URL resolution) |
+| `assets/media/logo.svg`, `icon.svg`, `icon.png` | Brand mark (navbar, favicon, JSON-LD `logo`). SVG is source of truth; `icon.png` is the 250×250 asset-touch fallback generated from it |
+| `assets/css/`, `assets/js/` | Design-system CSS and the map block (RTL corrections, sub-path URL resolution, hero density, 5-up services grid, FAB styles) |
 | `data/i18n/rtl.yaml` | Locales that render `dir="rtl"` |
 | `scripts/seo_check.py` | Post-build indexing assertions (stdlib only) |
 | `hugoblox.yaml` | `hugo_version` + `deploy.host` read by CI |
@@ -88,6 +89,13 @@ Requirements: **Hugo extended 0.168.0** (extended is mandatory — the theme cal
 - The hero is a client-rendered Preact block. `layouts/_partials/blox/preact-wrapper.html`
   emits a `<noscript>` copy server-side so crawlers and no-JS readers still get the
   page `<h1>`. Preact replaces it on hydration — one `<h1>` in the live DOM.
+- The footer is a project override (`layouts/_partials/site_footer.html`): the vendor
+  attribution line is removed for this client site, and a phone/WhatsApp row is added.
+  `<meta name="generator">` reports Hugo only. The theme stays MIT-licensed and its
+  licence text remains in the repo — nothing here relicenses the theme.
+- `layouts/_partials/components/contact-fab.html` renders the floating WhatsApp/phone
+  buttons on every page; it sits on the inline-end side, so it flips sides between
+  Arabic (left) and English (right).
 - Site search is **disabled** (`hugoblox.search.enable: false`): landing pages are
   Preact block lists, so Pagefind only indexes the 4 static blog articles. Re-enable
   when a server-rendered content section exists.

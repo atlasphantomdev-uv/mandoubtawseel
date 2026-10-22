@@ -7,16 +7,28 @@
 .navbar-brand {
   /* @apply text-black dark:text-white text-xl font-semibold; */
   color: var(--hb-color-header-fg);
-  @apply text-xl font-semibold;
+  @apply inline-flex items-center gap-2 text-xl font-semibold;
 }
 
 .navbar-brand svg {
-  @apply max-h-full max-w-full h-[1em] w-auto inline-block;
+  /* 1em (20px) muddied the logo mark; the badge needs ~28px to read. */
+  @apply max-h-full max-w-full inline-block h-7 w-auto;
 }
 
 .navbar-brand img {
   /* To shrink to line height, add: h-[1em] */
   @apply max-h-full w-auto inline-block;
+}
+
+/* 24x18 glyphs are below the 44px minimum touch target (measured). Keep the
+   visual size, enlarge the hit area. */
+.theme-toggle,
+[data-search-toggle] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 /* Ensure interactive controls show hand cursor */

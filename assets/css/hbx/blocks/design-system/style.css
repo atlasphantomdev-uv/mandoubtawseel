@@ -240,3 +240,105 @@ html[dir="rtl"] .hero-block-container a span[aria-hidden="true"] {
   font-weight: 600;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
+
+/* ---------------------------------------------------------------------------
+   Hero density. The block default is `py-24 sm:py-32 lg:py-40` inside the
+   section, on top of the section rhythm — MEASURED 997px band on a 900px
+   viewport with ~250px of dead space below the trust line. Tighten to a
+   predictable 3.5rem/4.5rem so the hero reads as one block.
+   --------------------------------------------------------------------------- */
+/* Child combinator on purpose: the hero paragraph also carries `max-w-2xl`, and a
+   descendant selector padded the paragraph too (measured 208px box for 2 lines). */
+#section-hero .hero-block-container > div > .max-w-2xl {
+  padding-block: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  #section-hero .hero-block-container > div > .max-w-2xl {
+    padding-block: 4.5rem;
+  }
+
+  /* 672px (max-w-2xl) forces the 60px Arabic h1 onto 3 lines with an orphan
+     word. Still a single column, just a readable measure. */
+  #section-hero .hero-block-container > div > .max-w-2xl {
+    max-width: 54rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Services grid: 10 items in 3 columns leaves one orphan card and a half-empty
+   band. 5 columns divides 10 evenly at >=1280px.
+   --------------------------------------------------------------------------- */
+@media (min-width: 1280px) {
+  #section-features .grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Pricing CTAs and the "most popular" badge shipped a primary->secondary
+   gradient that reads as a rendering artefact next to the solid hero button.
+   One brand action = one solid primary.
+   --------------------------------------------------------------------------- */
+#section-pricing a[href*="wa.me"],
+#section-pricing .bg-gradient-to-r,
+#section-pricing .bg-gradient-to-br {
+  background-image: none;
+  background-color: #1d4ed8;
+}
+
+/* ---------------------------------------------------------------------------
+   Floating contact actions (WhatsApp + phone). Rendered by
+   layouts/_partials/components/contact-fab.html on every page.
+   --------------------------------------------------------------------------- */
+.contact-fab {
+  position: fixed;
+  inset-inline-end: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  z-index: 40;
+}
+
+.contact-fab__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 9999px;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.contact-fab__btn:hover,
+.contact-fab__btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 24px -6px rgb(0 0 0 / 0.28);
+}
+
+.contact-fab__btn:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 3px;
+}
+
+.contact-fab__btn--wa {
+  background-color: #25d366;
+}
+
+.contact-fab__btn--phone {
+  background-color: #1d4ed8;
+}
+
+.contact-fab svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+@media print {
+  .contact-fab {
+    display: none;
+  }
+}

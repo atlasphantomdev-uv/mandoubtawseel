@@ -1,5 +1,4 @@
 <!doctype html>
-{{ "<!-- This site was created with Hugo Blox. https://hugoblox.com -->" | safeHTML }}
 {{ printf "<!-- Last Published: %s -->" (now | time.Format ":date_long") | safeHTML }}
 {{- $language_code := site.Language.Locale | default "en-us" -}}
 <html lang="{{$language_code}}" {{ if in hugo.Data.i18n.rtl.rtl $language_code }}dir="rtl"{{else}}dir="ltr"{{end}}
@@ -33,6 +32,9 @@
     <div class="page-footer">
       {{ partial "site_footer" . }}
     </div>
+
+    {{/* Floating WhatsApp + phone actions */}}
+    {{ partial "components/contact-fab" . }}
 
     {{/* Notification Container for toasts/alerts */}}
     {{ partial "notification-container" . }}

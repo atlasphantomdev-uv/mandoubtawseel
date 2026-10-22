@@ -92,3 +92,9 @@
 - id: skip_to_content
   translation: تخطَّ إلى المحتوى الرئيسي
 
+
+- id: contact_whatsapp
+  translation: راسلنا على واتساب
+
+- id: contact_call
+  translation: اتصل بنا

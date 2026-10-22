@@ -121,13 +121,11 @@ hugoblox:
   # Legal notices and licensing
   # ────────────────────────────────────────────────────────────────────────────
   copyright:
-    # Copyright notice - supports {year}, {name}, {license} placeholders
-    notice: "© {year} {name}. This work is licensed under {license}"
+    # Business site: plain copyright, no open licence. The starter's CC BY-NC-ND
+    # default would misstate the terms of a commercial service site.
+    notice: "© {year} {name}"
     license:
-      type: cc # cc | custom
-      allow_derivatives: false
-      share_alike: true
-      allow_commercial: false
+      type: "" # cc | custom | none
 
   # ────────────────────────────────────────────────────────────────────────────
   # SEO
