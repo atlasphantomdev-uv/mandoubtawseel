@@ -12,23 +12,22 @@ hugoblox:
   # Site-level branding (for people/profiles, use the author system in content/authors/)
   # ────────────────────────────────────────────────────────────────────────────
   identity:
-    # Site name - shown in navbar, footer, copyright, and browser title by default
-    # TODO_BRAND: real business name (Arabic + English) required before go-live.
+    # Site name - shown in navbar, footer, copyright, and browser title by default.
     # Falls back into <title>, RSS feed title and footer.
-    name: "TODO_BRAND"
+    name: "Mandoub Tawseel"
     # Legal entity for copyright notices (defaults to name if not set)
     organization: ""
     # Schema.org type for structured data — delivery courier business.
     type: local_business # person | organization | local_business
     # Short tagline displayed on your site
-    tagline: "TODO_TAGLINE"
+    tagline: "توصيل فوري ونفس اليوم في جميع الإمارات"
     # Site meta description for search engines and social sharing.
     # Per-language descriptions live in config/_default/languages.yaml; this is the fallback.
     description: "Courier and delivery service (مندوب توصيل) across Dubai, Abu Dhabi,
       Sharjah and all UAE emirates. Express and same-day delivery."
     # Social accounts (used for meta tags like Twitter Cards)
     social:
-      twitter: "" # TODO_BRAND_TWITTER — Twitter/X handle for Twitter Cards (without @)
+      twitter: "" # Twitter/X handle for Twitter Cards (without @)
 
   # ────────────────────────────────────────────────────────────────────────────
   # THEME
@@ -96,7 +95,7 @@ hugoblox:
     # Menu alignment
     align: center # left | center | right
     # Feature toggles
-    search: true
+    search: false # see hugoblox.search.enable: Pagefind cannot index Preact landing blocks
     theme_toggle: true
     theme_picker: false
     language_switcher: true
@@ -137,18 +136,20 @@ hugoblox:
   seo:
     # Browser tab title override (defaults to identity.name if not set)
     title: ""
-    # For local_business identity type only
+    # For local_business identity type only.
+    # Street/postal left empty on purpose (service business, no public shopfront);
+    # the JSON-LD builder omits any address field it does not have.
     location:
       address:
         street: ""
-        city: ""
-        region: ""
+        city: "Dubai"
+        region: "Dubai"
         postal_code: ""
-        country: ""
+        country: "AE"
       coordinates:
-        latitude: null
-        longitude: null
-      phone: ""
+        latitude: 25.2048
+        longitude: 55.2708
+      phone: "+971527890094"
     # AI/LLM crawler guidance (llms.txt)
     ai:
       allow:
@@ -180,7 +181,10 @@ hugoblox:
   # Site search
   # ────────────────────────────────────────────────────────────────────────────
   search:
-    enable: true
+    # Off: every landing page is a Preact block list, so Pagefind only ever sees the
+    # 4 static blog articles — a modal returning near-empty results is worse than none.
+    # Re-enable once content renders server-side (e.g. a markdown-based blog section).
+    enable: false
     # Trending/suggested search terms
     suggestions: []
     # Quick action shortcuts in search modal

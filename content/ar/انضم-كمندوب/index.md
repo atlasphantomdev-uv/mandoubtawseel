@@ -41,7 +41,7 @@ sections:
         المناسب، ونكفّل لك التدريب والدعم من أول يوم.
       primary_action:
         text: سجّل عبر واتساب
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D9%86%D8%B6%D9%85%D8%A7%D9%85%20%D9%83%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D9%86%D8%B6%D9%85%D8%A7%D9%85%20%D9%83%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
         icon: chat-bubble-left-right
         style: solid
       secondary_action:
@@ -68,7 +68,7 @@ sections:
           description: فريق دعم مندوب التوصيل متاح لمساعدتك في تنظيم الطلبات وحلّ أي عائق أثناء العمل.
         - name: أرباح على حسب الإنجاز
           icon: hero/banknotes
-          description: كلما زاد عدد الطلبات المنجزة، ارتفعت أرباحك. تفاصيل النموذج قيد الاعتماد (TODO_EARNINGS).
+          description: كلما زاد عدد الطلبات المنجزة، ارتفعت أرباحك. ويُحدَّد النموذج حسب عدد الطلبات والمسافة.
         - name: تدريب وإرشاد
           icon: hero/academic-cap
           description: إرشاد واضح للتطبيق وسياسات التسليم وطريقة التعامل مع العملاء باحتراف.
@@ -118,7 +118,7 @@ sections:
             لا، التسجيل مجاني تماماً ولا نطلب أي مبالغ مقابل الانضمام.
       button:
         text: سجّل عبر واتساب
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D9%86%D8%B6%D9%85%D8%A7%D9%85%20%D9%83%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D9%86%D8%B6%D9%85%D8%A7%D9%85%20%D9%83%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
     design:
       css_class: surface-band
 
@@ -129,7 +129,7 @@ sections:
       text: راسلنا على واتساب ببياناتك، وسنساعدك على استكمال التسجيل والانطلاق في أول وردية.
       button:
         text: سجّل عبر واتساب
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D9%86%D8%B6%D9%85%D8%A7%D9%85%20%D9%83%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D9%86%D8%B6%D9%85%D8%A7%D9%85%20%D9%83%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
     design:
       css_class: surface-dark
       background:

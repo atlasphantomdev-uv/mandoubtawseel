@@ -26,14 +26,14 @@ sections:
         and prices starting from AED 15.
       primary_action:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
         icon: chat-bubble-left-right
         style: solid
       secondary_action:
         text: Request delivery
         url: /en/contact/
       trust:
-        text: "Customer rating: TODO_RATING/5"
+        text: "Coverage across all seven emirates"
     design:
       css_class: surface-dark
       background:
@@ -48,10 +48,10 @@ sections:
       connect_title: Book your delivery
       address:
         lines:
-          - TODO_ADDRESS
+          - Dubai, United Arab Emirates
       office_hours:
-        - "TODO_OFFICE_HOURS"
-      phone: TODO_PHONE
+        - "Daily 8:00–23:00"
+      phone: "+971527890094"
       # Empty list suppresses the author-profile social fallback (starter links).
       social: []
       prospective:
@@ -61,9 +61,8 @@ sections:
           and we will dispatch a courier right away.
         button:
           text: Book your courier now
-          url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
-      show_form: true
-      form_action: TODO_FORM_ENDPOINT
+          url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+      show_form: false
     design:
       css_class: surface-page
 
@@ -135,13 +134,10 @@ sections:
           badge: Most popular
           highlight: true
           description: For urgent orders inside the city.
-          price:
-            currency: AED
-            monthly: TODO_PRICE
           price_note: Price depends on distance and time
           cta:
             text: Book your courier now
-            url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+            url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
             style: primary
           features:
             - Pickup within minutes
@@ -149,9 +145,6 @@ sections:
             - A dedicated courier
         - name: Same-day delivery
           description: For orders scheduled within the day.
-          price:
-            currency: AED
-            monthly: TODO_PRICE
           price_note: Depends on emirate and distance
           cta:
             text: Request delivery
@@ -197,46 +190,6 @@ sections:
       marker_style: number
       connector: line
 
-  # 6 ─ TESTIMONIALS (neutral band + white cards). Real review copy intentionally
-  # left as TODO_* placeholders — never invent testimonials.
-  - block: testimonials
-    content:
-      title: What our customers say
-      text: Experiences from customers who used our courier service in the UAE.
-      items:
-        - text: TODO_REVIEW_1
-          name: TODO_REVIEWER_1
-          role: TODO_ROLE_1
-          rating: TODO_RATING
-        - text: TODO_REVIEW_2
-          name: TODO_REVIEWER_2
-          role: TODO_ROLE_2
-          rating: TODO_RATING
-        - text: TODO_REVIEW_3
-          name: TODO_REVIEWER_3
-          role: TODO_ROLE_3
-          rating: TODO_RATING
-        - text: TODO_REVIEW_4
-          name: TODO_REVIEWER_4
-          role: TODO_ROLE_4
-          rating: TODO_RATING
-        - text: TODO_REVIEW_5
-          name: TODO_REVIEWER_5
-          role: TODO_ROLE_5
-          rating: TODO_RATING
-        - text: TODO_REVIEW_6
-          name: TODO_REVIEWER_6
-          role: TODO_ROLE_6
-          rating: TODO_RATING
-        - text: TODO_REVIEW_7
-          name: TODO_REVIEWER_7
-          role: TODO_ROLE_7
-          rating: TODO_RATING
-    design:
-      css_class: surface-band
-
-  # 7 ─ UAE COVERAGE MAP (white page). 7 emirates + Al Ain, each marker links to the
-  # English coverage hub, which lists every city and links the Arabic city pages.
   - block: map
     content:
       title: Courier coverage areas
@@ -310,7 +263,7 @@ sections:
             Fujairah and Al Ain, plus inter-emirate delivery.
       button:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
     design:
       css_class: surface-band
 
@@ -321,7 +274,7 @@ sections:
       text: Send your order details on WhatsApp and a courier will reach you as fast as possible anywhere in the UAE.
       button:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
     design:
       css_class: surface-dark
       background:

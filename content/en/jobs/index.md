@@ -24,7 +24,7 @@ sections:
         freelance work and start delivering in your own city.
       primary_action:
         text: Apply on WhatsApp
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20apply%20for%20a%20courier%20job"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20apply%20for%20a%20courier%20job"
         icon: chat-bubble-left-right
         style: solid
       secondary_action:
@@ -105,10 +105,10 @@ sections:
         - question: How are earnings calculated?
           answer: >
             By the number of orders, distance and service type. Official figures
-            are pending approval (TODO_EARNINGS).
+            depend on order volume and distance.
       button:
         text: Apply on WhatsApp
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20apply%20for%20a%20courier%20job"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20apply%20for%20a%20courier%20job"
     design:
       css_class: surface-band
 
@@ -119,7 +119,7 @@ sections:
       text: Send your details on WhatsApp and our hiring team will get in touch shortly to discuss the roles available in your city.
       button:
         text: Apply on WhatsApp
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20apply%20for%20a%20courier%20job"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20apply%20for%20a%20courier%20job"
     design:
       css_class: surface-dark
       background:

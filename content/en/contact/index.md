@@ -18,19 +18,18 @@ sections:
       connect_title: Book your delivery
       address:
         lines:
-          - TODO_ADDRESS
+          - Dubai, United Arab Emirates
       office_hours:
-        - "TODO_OFFICE_HOURS"
-      phone: TODO_PHONE
+        - "Daily 8:00–23:00"
+      phone: "+971527890094"
       social: []
       prospective:
         title: Book in under a minute
         text: Send the order details on WhatsApp and we will dispatch a courier right away.
         button:
           text: Book your courier now
-          url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
-      show_form: true
-      form_action: TODO_FORM_ENDPOINT
+          url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+      show_form: false
     design:
       css_class: surface-page
 ---

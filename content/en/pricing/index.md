@@ -23,7 +23,7 @@ sections:
         while express and same-day delivery are quoted by distance and time.
       primary_action:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
         icon: chat-bubble-left-right
         style: solid
       secondary_action:
@@ -58,13 +58,10 @@ sections:
           badge: Most requested
           highlight: true
           description: For urgent orders within the city.
-          price:
-            currency: AED
-            monthly: TODO_PRICE
           price_note: Price depends on distance and time
           cta:
             text: Book your courier now
-            url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+            url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
             style: primary
           features:
             - Pickup within minutes
@@ -72,9 +69,6 @@ sections:
             - A dedicated courier for your order
         - name: Same-day delivery
           description: For orders scheduled during the day.
-          price:
-            currency: AED
-            monthly: TODO_PRICE
           price_note: By emirate and distance
           cta:
             text: Request delivery
@@ -111,7 +105,7 @@ sections:
             monthly pricing available depending on volume and routes.
       button:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
     design:
       css_class: surface-band
 
@@ -122,7 +116,7 @@ sections:
       text: Send the pickup point, drop-off point and item type on WhatsApp and we will reply with the price and expected time.
       button:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
     design:
       css_class: surface-dark
       background:

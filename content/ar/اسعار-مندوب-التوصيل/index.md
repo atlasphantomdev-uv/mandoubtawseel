@@ -25,7 +25,7 @@ sections:
         والاستعجال وحجم الشحنة، ويبدأ من 15 درهماً للطلبات الاقتصادية.
       primary_action:
         text: اطلب مندوبك الآن
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
         icon: chat-bubble-left-right
         style: solid
       secondary_action:
@@ -97,13 +97,10 @@ sections:
           badge: الأكثر طلباً
           highlight: true
           description: للطلبات العاجلة داخل المدينة.
-          price:
-            currency: درهم
-            monthly: TODO_PRICE
           price_note: حسب المسافة والاستعجال
           cta:
             text: اطلب مندوبك الآن
-            url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+            url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
             style: primary
           features:
             - استلام خلال دقائق
@@ -111,9 +108,6 @@ sections:
             - مندوب مخصص لطلبك
         - name: توصيل نفس اليوم
           description: للطلبات المجدولة خلال اليوم.
-          price:
-            currency: درهم
-            monthly: TODO_PRICE
           price_note: حسب الإمارة والمسافة
           cta:
             text: اطلب التوصيل
@@ -125,9 +119,6 @@ sections:
             - تأكيد عبر واتساب
         - name: توصيل بين الإمارات
           description: للرحلات بين مدينتين مختلفتين.
-          price:
-            currency: درهم
-            monthly: TODO_PRICE
           price_note: حسب المسار ونوع الشحنة
           cta:
             text: اطلب التوصيل
@@ -195,7 +186,7 @@ sections:
             لا، نعرض عليك البنود كاملة قبل التنفيذ، ولا يُضاف أي مبلغ غير متفق عليه.
       button:
         text: اطلب مندوبك الآن
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
     design:
       css_class: surface-band
 
@@ -206,7 +197,7 @@ sections:
       text: أرسل نقطة الاستلام ونقطة التسليم ونوع الشحنة على واتساب وسنرسل لك السعر والوقت المتوقع.
       button:
         text: اطلب مندوبك الآن
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
     design:
       css_class: surface-dark
       background:

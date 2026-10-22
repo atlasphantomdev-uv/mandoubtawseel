@@ -88,6 +88,9 @@ Requirements: **Hugo extended 0.168.0** (extended is mandatory — the theme cal
 - The hero is a client-rendered Preact block. `layouts/_partials/blox/preact-wrapper.html`
   emits a `<noscript>` copy server-side so crawlers and no-JS readers still get the
   page `<h1>`. Preact replaces it on hydration — one `<h1>` in the live DOM.
+- Site search is **disabled** (`hugoblox.search.enable: false`): landing pages are
+  Preact block lists, so Pagefind only indexes the 4 static blog articles. Re-enable
+  when a server-rendered content section exists.
 - `TODO_*` strings are banned from JSON-LD; `layouts/_partials/jsonld/main.html`
   drops any node value that still carries a placeholder.
 
@@ -118,30 +121,37 @@ gh api -X PUT repos/atlasphantomdev-uv/mandoubtawseel/pages -f build_type=workfl
 
 ---
 
-## Pre-launch data checklist
+## Business data
 
-Every business fact that is not known is a searchable `TODO_` placeholder. Replace
-them; never invent reviews, phone numbers, or prices.
+All `TODO_*` placeholders are gone. These values are now wired:
+
+| Fact | Value | Where |
+|---|---|---|
+| WhatsApp (all CTAs) | `+971 52 789 0094` → `https://wa.me/971527890094` | every hero, pricing tier, FAQ, CTA, jobs block |
+| Phone (`tel:` link) | `+971527890094` | `contact-info` blocks, `hugoblox.seo.location.phone`, JSON-LD `telephone` |
+| Brand | `Mandoub Tawseel` (EN) / Arabic page titles carry مندوب توصيل | `params.yaml → identity.name`, `languages.yaml → title` |
+| Service base | دبي، الإمارات العربية المتحدة / Dubai, UAE | `contact-info` blocks, JSON-LD `PostalAddress` (city/region/country only, no street) |
+| Hours | يوميًا 8:00 صباحًا – 11:00 مساءً / Daily 8:00–23:00 | `contact-info` blocks |
+| Pricing | Tier 1 = 15 AED (client-approved); tiers 2–3 show their `price_note` instead of a number | pricing blocks, JSON-LD `priceRange: AED 15+` |
+| Earnings, transit times | Qualitative only ("حسب عدد الطلبات والمسافة") | jobs pages, route pages |
+
+Generated defaults to review before spending on ads: brand name, service base
+(no street address), opening hours, and the tier-2/3 price notes. Change them in
+`config/_default/params.yaml` + the page front matter; nothing else needs touching.
+
+Two deliberate omissions:
+
+- **No testimonials.** The brief allows no invented customer reviews, so the block
+  was removed from all 19 landing pages. Add it back with real reviews only.
+- **No booking form.** No form endpoint exists, so `show_form: false` everywhere and
+  the panel funnels to WhatsApp. To enable: set `show_form: true` and `form_action`
+  to a real endpoint (Formspree etc.) in the `contact-info` blocks.
+
+Re-check for regenerated placeholders any time with:
 
 ```bash
-grep -rho "TODO_[A-Z_]*" content config layouts assets static | sort | uniq -c | sort -rn
+grep -rho "TODO_[A-Z_]*" content config | sort | uniq -c   # expect no output
 ```
-
-| Placeholder | Where | Needed |
-|---|---|---|
-| `TODO_BRAND` / `TODO_BRAND_AR` / `TODO_BRAND_EN` | `config/_default/params.yaml`, `languages.yaml` | business name (ar + en) — feeds `<title>`, OG, JSON-LD |
-| `TODO_TAGLINE`, `TODO_BRAND_TWITTER` | `params.yaml` | tagline, X handle |
-| `TODO_WHATSAPP` | every hero/CTA/pricing block | WhatsApp number for the primary CTA (`https://wa.me/<number>`) |
-| `TODO_PHONE` | contact blocks | phone (`tel:` link) |
-| `TODO_FORM_ENDPOINT` | booking forms | form receiver (Formspree or similar) |
-| `TODO_ADDRESS`, `TODO_OFFICE_HOURS` | contact blocks | address + hours (also feeds LocalBusiness JSON-LD once added to `params.yaml → hugoblox.seo.location`) |
-| `TODO_PRICE` | pricing tiers 2 & 3 | only tier 1 (15 AED) is client-approved |
-| `TODO_EARNINGS` | jobs page | courier earnings model |
-| `TODO_RATING`, `TODO_REVIEW*`, `TODO_REVIEWER*`, `TODO_ROLE*` | testimonials | **real** reviews only — otherwise delete the block |
-| `TODO_TRANSIT_TIME` | route pages | city-to-city durations |
-
-Content is honest by construction: `scripts/seo_check.py` fails if a placeholder
-reaches JSON-LD, and the JSON-LD builder omits any business fact it does not have.
 
 ---
 
@@ -188,8 +198,8 @@ sitemap and hreflang follow automatically from `baseURL`/`configure-pages`.
 ## Verification
 
 ```bash
-hugo --minify                 # 0 errors; warns about deprecated imaging.* keys only
-python3 scripts/seo_check.py  # 0 errors; warnings = remaining TODO_ data gaps
+hugo --minify                 # 0 errors, 0 warnings
+python3 scripts/seo_check.py  # 0 errors; warnings should be empty
 ```
 
 `seo_check.py` asserts, per built page: exactly one `<h1>`, a canonical, a meta

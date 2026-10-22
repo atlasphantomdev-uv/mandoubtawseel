@@ -25,7 +25,7 @@ sections:
         businesses across all UAE emirates.
       primary_action:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
         icon: chat-bubble-left-right
         style: solid
       secondary_action:
@@ -139,7 +139,7 @@ sections:
             available for daily order and document delivery.
       button:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
     design:
       css_class: surface-band
 
@@ -150,7 +150,7 @@ sections:
       text: Send your order details on WhatsApp and we will pick the right service and reach you as fast as possible.
       button:
         text: Book your courier now
-        url: "https://wa.me/TODO_WHATSAPP?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
+        url: "https://wa.me/971527890094?text=Hello%2C%20I%20would%20like%20to%20book%20a%20courier"
     design:
       css_class: surface-dark
       background:

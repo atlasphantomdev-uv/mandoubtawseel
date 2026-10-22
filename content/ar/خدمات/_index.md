@@ -26,7 +26,7 @@ sections:
         وتوصيل السيارات، نغطي كل احتياجات الأفراد والشركات في جميع الإمارات.
       primary_action:
         text: اطلب مندوبك الآن
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
         icon: chat-bubble-left-right
         style: solid
       secondary_action:
@@ -142,7 +142,7 @@ sections:
             والمستندات بشكل يومي.
       button:
         text: اطلب مندوبك الآن
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
     design:
       css_class: surface-band
 
@@ -153,7 +153,7 @@ sections:
       text: أرسل تفاصيل طلبك على واتساب وسنختار لك الخدمة الأنسب ويصلك المندوب في أسرع وقت.
       button:
         text: اطلب مندوبك الآن
-        url: "https://wa.me/TODO_WHATSAPP?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
+        url: "https://wa.me/971527890094?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AF%D9%88%D8%A8%20%D8%AA%D9%88%D8%B5%D9%8A%D9%84"
     design:
       css_class: surface-dark
       background:

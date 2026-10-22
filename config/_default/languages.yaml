@@ -10,7 +10,7 @@ ar:
   label: العربية
   locale: ar-ae
   weight: 1
-  title: TODO_BRAND_AR | مندوب توصيل في الإمارات
+  title: مندوب توصيل | مندوب التوصيل في الإمارات
   params:
     # No price figure in the site-wide meta description: a TODO_ placeholder here would
     # ship straight into the indexed SERP snippet. Page bodies carry TODO_PRICE instead.
@@ -24,7 +24,7 @@ en:
   label: English
   locale: en-us
   weight: 2
-  title: TODO_BRAND_EN | Delivery Courier in the UAE
+  title: Mandoub Tawseel | Delivery Courier in the UAE
   params:
     # No price figure here — a TODO_ placeholder would ship into the indexed SERP snippet.
     description: Courier and delivery service across Dubai, Abu Dhabi, Sharjah and

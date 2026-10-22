@@ -27,14 +27,31 @@
 -}}
 {{- with $name }}{{ $website = merge $website (dict "name" .) }}{{ end -}}
 
-{{/* Delivery business. Only config-sourceable facts: url, logo, areaServed. */}}
+{{/* Delivery business. Only config-sourceable facts: url, logo, areaServed.
+     name/telephone/address come from hugoblox.identity + hugoblox.seo.location; each
+     is omitted when empty so nothing invented reaches structured data. */}}
+{{- $seoLocation := site.Params.hugoblox.seo.location | default dict -}}
+{{- $addr := $seoLocation.address | default dict -}}
 {{- $business := dict
   "@type" "LocalBusiness"
   "@id" $businessID
   "url" $siteURL
   "logo" $logo
   "areaServed" (dict "@type" "Country" "name" "United Arab Emirates")
+  "priceRange" "AED 15+"
 -}}
+{{- with $name }}{{ $business = merge $business (dict "name" .) }}{{ end -}}
+{{- with $seoLocation.phone }}{{ $business = merge $business (dict "telephone" .) }}{{ end -}}
+{{- $postal := dict -}}
+{{- range $key, $value := dict
+  "streetAddress" $addr.street
+  "addressLocality" $addr.city
+  "addressRegion" $addr.region
+  "postalCode" $addr.postal_code
+  "addressCountry" $addr.country -}}
+  {{- with $value }}{{ $postal = merge $postal (dict $key .) }}{{ end -}}
+{{- end -}}
+{{- if $postal }}{{ $business = merge $business (dict "address" (merge (dict "@type" "PostalAddress") $postal)) }}{{ end -}}
 
 {{- $areaServed := slice -}}
 {{- range (slice "أبوظبي" "دبي" "الشارقة" "عجمان" "أم القيوين" "رأس الخيمة" "الفجيرة") -}}
@@ -125,7 +142,7 @@
   {{- $q := .question | default "" -}}
   {{- $a := .answer | default "" -}}
   {{- if and (not (strings.Contains $q "TODO_")) (not (strings.Contains $a "TODO_")) -}}
-    {{- $entities = $entities | append (dict "@type" "Question" "name" $q "acceptedAnswer" (dict "@type" "Answer" "text" ($a | plainify))) -}}
+    {{- $entities = $entities | append (dict "@type" "Question" "name" $q "acceptedAnswer" (dict "@type" "Answer" "text" ($a | plainify | replaceRE `\*+` ""))) -}}
   {{- end -}}
 {{- end -}}
 {{- if $entities -}}
