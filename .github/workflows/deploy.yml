@@ -103,6 +103,11 @@ jobs:
                     "مندوب-توصيل-في-الفجيرة/" "مندوب-توصيل-في-العين/" \
                     "خدمات/" "اسعار-مندوب-التوصيل/" "خطوط-التوصيل/" \
                     "مناطق-التغطية/" "وظائف-مندوب-توصيل/" "مدونة/"; do
-          curl -sS --max-time 15 "https://api.indexnow.org/indexnow?url=${BASE}/${path}&key=${KEY}&keyLocation=${BASE}/${KEY}.txt" \
+          # --data-urlencode with -G: the Arabic paths must be percent-encoded or
+          # IndexNow rejects the request with 400.
+          curl -sS -G --max-time 15 "https://api.indexnow.org/indexnow" \
+            --data-urlencode "url=${BASE}/${path}" \
+            --data-urlencode "key=${KEY}" \
+            --data-urlencode "keyLocation=${BASE}/${KEY}.txt" \
             -o /dev/null -w "indexnow ${path:-/} %{http_code}\n" || true
         done
