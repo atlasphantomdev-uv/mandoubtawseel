@@ -142,7 +142,7 @@ Generated defaults to review before spending on ads: brand name, service base
 Two deliberate omissions:
 
 - **No testimonials.** The brief allows no invented customer reviews, so the block
-  was removed from all 19 landing pages. Add it back with real reviews only.
+  was removed from all 10 landing pages that had it. Add it back with real reviews only.
 - **No booking form.** No form endpoint exists, so `show_form: false` everywhere and
   the panel funnels to WhatsApp. To enable: set `show_form: true` and `form_action`
   to a real endpoint (Formspree etc.) in the `contact-info` blocks.

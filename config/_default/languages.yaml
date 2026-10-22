@@ -12,8 +12,8 @@ ar:
   weight: 1
   title: مندوب توصيل | مندوب التوصيل في الإمارات
   params:
-    # No price figure in the site-wide meta description: a TODO_ placeholder here would
-    # ship straight into the indexed SERP snippet. Page bodies carry TODO_PRICE instead.
+    # No price figure in the site-wide meta description: only the client-approved
+    # 15 AED floor exists, and it lives on the pricing pages, not the SERP snippet.
     description: خدمة مندوب توصيل في دبي وأبوظبي والشارقة وجميع الإمارات. توصيل فوري وبنفس
       اليوم لجميع الإمارات.
   # NOTE: the Arabic main menu lives in config/_default/menus.yaml (top level =
@@ -26,7 +26,8 @@ en:
   weight: 2
   title: Mandoub Tawseel | Delivery Courier in the UAE
   params:
-    # No price figure here — a TODO_ placeholder would ship into the indexed SERP snippet.
+    # No price figure here: only the 15 AED floor is approved, and it belongs on the
+    # pricing pages rather than in the indexed SERP snippet.
     description: Courier and delivery service across Dubai, Abu Dhabi, Sharjah and
       all UAE emirates. Express and same-day delivery for all emirates.
   menu:
