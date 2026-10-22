@@ -1,6 +1,6 @@
 ---
 title: "Courier in the UAE | Express & Same-Day Delivery"
-description: "Courier and delivery service in Dubai, Abu Dhabi and Sharjah. Express and same-day delivery across the UAE, with live tracking and prices from AED 15. Book your courier now."
+description: "Courier and delivery service in Dubai, Abu Dhabi and Sharjah. Express and same-day delivery across the UAE, with live tracking and prices from AED 15."
 keywords:
   - courier UAE
   - delivery service UAE

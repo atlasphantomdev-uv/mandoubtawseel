@@ -237,22 +237,92 @@
        ponytail: re-sync with blox/layouts/_partials/blox/preact-wrapper.html on upgrade. */}}
   {{ if eq $block_type "hero" }}
     {{ $c := $block.content | default dict }}
-    {{ $title := $c.title | default "" | replaceRE `\[|\]` "" }}
-    <noscript>
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        {{ with $c.eyebrow }}<p class="text-sm font-medium">{{ . | plainify }}</p>{{ end }}
-        {{ with $title }}<h1 class="text-3xl sm:text-4xl font-bold mt-3">{{ . | plainify }}</h1>{{ end }}
-        {{ with $c.text }}<p class="mt-4 text-lg">{{ . | plainify }}</p>{{ end }}
-        <p class="mt-8 flex flex-wrap gap-3 justify-center">
-          {{ with $c.primary_action }}
-            {{ with .url }}<a class="underline font-semibold" href="{{ cond (strings.HasPrefix . "http") . (. | relURL) }}">{{ $c.primary_action.text }}</a>{{ end }}
-          {{ end }}
-          {{ with $c.secondary_action }}
-            {{ with .url }}<a class="underline" href="{{ cond (strings.HasPrefix . "http") . (. | relURL) }}">{{ $c.secondary_action.text }}</a>{{ end }}
-          {{ end }}
-        </p>
+    {{ $des := $block.design | default dict }}
+    {{/* PERFORMANCE: the hero is the LCP element, but blox/hero has no block.html, so
+         this container used to ship EMPTY and Preact filled it after the JS bundle
+         loaded. Measured on the built home page (throttled mobile Lighthouse):
+         - CLS 0.479, attributed entirely to #section-contact-info, which Preact's
+           hero mount (0px -> 571px) pushed down.
+         - LCP 11.1s, because the <h1> only existed after hydration.
+         The copy now renders INLINE (not inside <noscript>) so it is present in the
+         initial HTML and the container already occupies its final height.
+
+         blox/hero/client.jsx calls preact render() — NOT hydrate() — so on mount it
+         REPLACES these children. We therefore mirror blox/hero/component.jsx's exact
+         element structure and Tailwind class strings for the common case so the
+         pre-mount and post-mount heights match and no shift occurs; after mount the
+         live DOM is Preact's, containing exactly one <h1>.
+
+         Falls back to plain <noscript> copy when we cannot guarantee a height match:
+         a hero with media, or with a split/stacked layout.
+         ponytail: re-sync with blox/hero/component.jsx + blox/hero/client.jsx on upgrade. */}}
+    {{ $heroCanSSR := and (not $c.media) (not $des.layout) }}
+    {{ if not $heroCanSSR }}
+      {{ $title := $c.title | default "" | replaceRE `\[|\]` "" }}
+      <noscript>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+          {{ with $c.eyebrow }}<p class="text-sm font-medium">{{ . | plainify }}</p>{{ end }}
+          {{ with $title }}<h1 class="text-3xl sm:text-4xl font-bold mt-3">{{ . | plainify }}</h1>{{ end }}
+          {{ with $c.text }}<p class="mt-4 text-lg">{{ . | plainify }}</p>{{ end }}
+          <p class="mt-8 flex flex-wrap gap-3 justify-center">
+            {{ with $c.primary_action }}
+              {{ with .url }}<a class="underline font-semibold" href="{{ cond (strings.HasPrefix . "http") . (. | relURL) }}">{{ $c.primary_action.text }}</a>{{ end }}
+            {{ end }}
+            {{ with $c.secondary_action }}
+              {{ with .url }}<a class="underline" href="{{ cond (strings.HasPrefix . "http") . (. | relURL) }}">{{ $c.secondary_action.text }}</a>{{ end }}
+            {{ end }}
+          </p>
+        </div>
+      </noscript>
+    {{ else }}
+      {{/* ACTION_STYLES — literal strings copied from blox/hero/component.jsx so the
+           Tailwind scanner and the rendered box model match the hydrated result. */}}
+      {{ $actionStyles := dict
+        "gradient" "rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/40 hover:from-primary-500 hover:to-secondary-500 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+        "solid" "rounded-full bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        "outline" "rounded-full px-6 py-3 text-sm font-semibold ring-1 ring-inset ring-gray-300 dark:ring-gray-600 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors"
+        "ghost" "rounded-full px-6 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors"
+        "text" "text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+      -}}
+      {{ $primaryIcon := index $props "icon_svg" | default "" }}
+      {{ $secondaryIcon := index $props "secondary_icon_svg" | default "" }}
+      {{/* SIZE_CLASSES default + LAYOUTS centered — see blox/hero/component.jsx:146-166 */}}
+      <div class="relative isolate px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl py-24 sm:py-32 lg:py-40">
+          <div class="text-center">
+            {{ with $c.eyebrow }}<p class="mb-4 text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400">{{ . | plainify }}</p>{{ end }}
+            {{ with $c.title }}
+              {{/* renderTitle(): `[x]` -> gradient span. Hugo's RE2 has no lookahead, so
+                   this is the plain bracket form; our titles carry no markdown links. */}}
+              {{ $h1 := replaceRE `\[([^\]]+)\]` `<span class="bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-500 dark:from-primary-400 dark:via-secondary-400 dark:to-primary-400 bg-clip-text text-transparent">$1</span>` (. | plainify) }}
+              <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-6xl">{{ $h1 | safeHTML }}</h1>
+            {{ end }}
+            {{ with $c.text }}<p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">{{ . | plainify }}</p>{{ end }}
+            {{ if or $c.primary_action.url $c.secondary_action.url }}
+              <div class="mt-10 flex items-center justify-center gap-x-6 flex-wrap gap-y-3">
+                {{ range $act := slice (dict "a" $c.primary_action "d" "gradient" "icon" $primaryIcon) (dict "a" $c.secondary_action "d" "text" "icon" $secondaryIcon) }}
+                  {{ with $act.a }}
+                    {{ if and .url .text }}
+                      {{ $styleKey := .style | default $act.d }}
+                      {{ $cls := index $actionStyles $styleKey | default (index $actionStyles $act.d) }}
+                      {{ $external := or (strings.HasPrefix .url "http://") (strings.HasPrefix .url "https://") }}
+                      <a class="inline-flex items-center gap-2 {{ $cls }}" href="{{ .url }}"{{ if $external }} target="_blank" rel="noopener"{{ end }}><span>{{ .text | plainify }}</span>{{ with $act.icon }}{{/* mirrors ActionButton -> Icon: outer inline-flex span, inner span sized to 1em, svg filled to 100% of it */}}<span class="inline-flex"><span style="height: 1em" class="inline-block">{{ . | replaceRE `^(<svg\b)` `${1} style="height:100%;width:auto"` | safeHTML }}</span></span>{{ end }}{{ if and (eq $styleKey "text") (not $act.icon) }}<span aria-hidden="true">→</span>{{ end }}</a>
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              </div>
+            {{ end }}
+            {{ with $c.trust }}
+              {{ if or .stars .text }}
+                <div class="mt-8 flex items-center justify-center gap-3 flex-wrap">
+                  {{ with .text }}<span class="text-sm text-gray-600 dark:text-gray-400">{{ . | plainify }}</span>{{ end }}
+                </div>
+              {{ end }}
+            {{ end }}
+          </div>
+        </div>
       </div>
-    </noscript>
+    {{ end }}
   {{ end }}
 </div>
 

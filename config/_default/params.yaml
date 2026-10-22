@@ -153,8 +153,8 @@ hugoblox:
       allow:
         - /
       disallow: []
-      note: "Guidance for AI crawlers - customize to match your public content."
-      contact: ""
+      note: "Arabic official site of Mandoub Tawseel, a courier and delivery service (مندوب توصيل) in the UAE. Arabic content at /, English mirror at /en/."
+      contact: "https://wa.me/971527890094"
 
   # ────────────────────────────────────────────────────────────────────────────
   # CONTENT

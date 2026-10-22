@@ -50,6 +50,7 @@
     {{ $desc = $superuser_role }}
   {{ end }}
   <meta name="description" content="{{ $desc | plainify }}" />
+  {{ with .Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}" />{{ end }}
 
   {{/* hreflang: only for pages that actually have a translation. Every alternate
        uses the BCP-47 locale (ar-ae / en-us) so both sides emit an identical
@@ -176,10 +177,12 @@
     {{ $title = .Title | default $branding.site_title }}
     {{ if ne $title $branding.site_title }}{{ $title = printf "%s | %s" $title $branding.site_title }}{{ end }}
   {{ end }}
-  <meta property="twitter:card" content="{{ $twitter_card }}" />
+  <meta name="twitter:card" content="{{ $twitter_card }}" />
+  <meta name="twitter:title" content="{{ $title }}" />
+  <meta name="twitter:description" content="{{ $desc | plainify }}" />
   {{ with site.Params.hugoblox.identity.social.twitter }}
-    <meta property="twitter:site" content="@{{ . }}" />
-    <meta property="twitter:creator" content="@{{ . }}" />
+    <meta name="twitter:site" content="@{{ . }}" />
+    <meta name="twitter:creator" content="@{{ . }}" />
   {{ end }}
   <meta property="og:site_name" content="{{ $branding.site_title }}" />
   <meta property="og:url" content="{{ .Permalink }}" />
@@ -187,9 +190,15 @@
   <meta property="og:description" content="{{ $desc }}" />
   {{- with $og_image -}}
     <meta property="og:image" content="{{ . }}" />
-    <meta property="twitter:image" content="{{ . }}" />
+    <meta name="twitter:image" content="{{ . }}" />
   {{- end -}}
-  <meta property="og:locale" content="{{ site.Language.Locale | default "en-us" }}" />
+  {{ $loc := site.Language.Locale | default "en-us" }}
+  {{ $ps := split $loc "-" }}
+  {{ if eq (len $ps) 2 }}
+    <meta property="og:locale" content="{{ printf "%s_%s" (index $ps 0) (upper (index $ps 1)) }}" />
+  {{ else }}
+    <meta property="og:locale" content="{{ replace $loc "-" "_" }}" />
+  {{ end }}
   {{ if .IsPage }}
     {{ if not .PublishDate.IsZero }}
       <meta
@@ -210,9 +219,17 @@
 
   <title>{{$title}}</title>
 
-  {{/* Arabic display weight, preloaded so the hero heading does not flash in
-       the platform Arabic fallback before swap (custom.css @font-face). */}}
+  {{/* PERFORMANCE: preload the Arabic display weights so the hero heading paints in
+       IBM Plex Sans Arabic on the FIRST paint instead of swapping ~6s later on throttled
+       mobile. custom.css @font-face uses font-display:swap; with only the fallback
+       painted at FCP, the h1 re-paints when Plex Arabic arrives — Lighthouse measures that
+       late swap repaint as the LCP "Render Delay" (was 9865ms; LCP 10.3s).
+       700 = hero <h1> (font-bold) = the LCP element. 600 = eyebrow/semibold headings.
+       400 (body) is deliberately NOT preloaded: it is not the LCP element, and preloading
+       all three costs 100KB of upfront bandwidth. */}}
   {{ if in hugo.Data.i18n.rtl.rtl site.Language.Locale }}
+    <link rel="preload" as="font" type="font/woff2"
+          href="{{ "fonts/plex-arabic-700.woff2" | relURL }}" crossorigin="anonymous" />
     <link rel="preload" as="font" type="font/woff2"
           href="{{ "fonts/plex-arabic-600.woff2" | relURL }}" crossorigin="anonymous" />
   {{ end }}

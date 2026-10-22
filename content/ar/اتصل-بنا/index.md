@@ -5,6 +5,9 @@ keywords:
   - اتصل بنا
   - مندوب توصيل
   - خدمة توصيل
+  - اطلب مندوب توصيل
+  - حجز توصيل فوري
+  - تواصل واتساب
 type: landing
 translationKey: contact
 date: 2026-10-14

@@ -5,6 +5,9 @@ keywords:
   - contact us
   - courier UAE
   - delivery service
+  - book a courier
+  - contact courier UAE
+  - express delivery UAE
 type: landing
 translationKey: contact
 date: 2026-10-14

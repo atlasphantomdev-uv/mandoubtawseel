@@ -48,7 +48,7 @@ enableInlineShortcodes: true
 # spelling variants (أبوظبي vs ابوظبي) on Pages. Must stay false.
 disableAliases: false
 outputs:
-  home: [HTML, RSS, WebAppManifest, headers, redirects, backlinks]
+  home: [HTML, RSS, WebAppManifest, headers, redirects, backlinks, LLM]
   page: [HTML]
   section: [HTML, RSS]
 imaging:
