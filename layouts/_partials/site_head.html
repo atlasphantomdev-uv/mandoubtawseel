@@ -101,6 +101,13 @@
     <link rel="alternate" href="{{ .RelPermalink }}" type="application/rss+xml" title="{{ $branding.site_title }}" />
   {{ end }}
 
+  {{/* Discoverability: llms.txt is generated at the site root via the home page's `LLM`
+       output format (config/_default/hugo.yaml). Crawlers/agents fetch /llms.txt by
+       convention, but an explicit head link improves AI-search discoverability. */}}
+  {{ with .OutputFormats.Get "LLM" }}
+    <link rel="alternate" href="{{ .RelPermalink }}" type="text/plain" title="llms.txt" />
+  {{ end }}
+
   {{/* Progressive Web App (PWA) Icon - SVG preferred */}}
   {{ $icon := partial "functions/get_site_icon" 32 }}
   {{ with $icon.resource }}
