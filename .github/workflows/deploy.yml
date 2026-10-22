@@ -85,6 +85,12 @@ jobs:
     # IndexNow (Bing, Yandex, Seznam, Naver) — instant re-crawl of the changed pages.
     # Key lives in static/<key>.txt; keyLocation serves it from the Pages sub-path.
     # Non-blocking: a submission failure must never roll back a good deploy.
+    - name: Checkout IndexNow key
+      uses: actions/checkout@v6
+      with:
+        sparse-checkout: static
+        sparse-checkout-cone-mode: false
+
     - name: Submit URLs to IndexNow
       continue-on-error: true
       run: |
