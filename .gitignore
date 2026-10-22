@@ -94,3 +94,6 @@ dev-debug.log
 # Agent/tooling state (not site code)
 .opencode/
 .taskmaster/
+.agents/
+.cursor/
+.probe/

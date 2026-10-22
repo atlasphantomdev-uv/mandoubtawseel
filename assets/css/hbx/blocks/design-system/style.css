@@ -155,3 +155,88 @@
 #section-contact-info textarea::placeholder {
   color: #6b7280;
 }
+
+/* ---------------------------------------------------------------------------
+   RTL (Arabic) typography corrections.
+
+   The block markup is Latin-first: every heading carries `tracking-tight` and the
+   hero h1 resolves to line-height:1.0. Both are wrong for Arabic — negative
+   tracking distorts the cursive joins and a 1.0 line box clips ascenders/diacritics
+   across a multi-line heading. MEASURED (ar home @1280): hero h1 60px/60px,
+   letter-spacing -1.5px. Reset only under html[dir="rtl"] so /en/ is untouched.
+   --------------------------------------------------------------------------- */
+html[dir="rtl"] .tracking-tighter,
+html[dir="rtl"] .tracking-tight,
+html[dir="rtl"] .tracking-wide,
+html[dir="rtl"] .tracking-wider,
+html[dir="rtl"] .tracking-widest {
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3 {
+  line-height: 1.25;
+}
+
+/* Hero secondary action ships a literal "→" glyph (span[aria-hidden]). A forward
+   affordance must point left in RTL; flip the glyph in place. */
+html[dir="rtl"] .hero-block-container a span[aria-hidden="true"] {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+/* ---------------------------------------------------------------------------
+   Pricing price token must not force horizontal page scroll.
+
+   The price renders as `span.text-5xl` inside a `flex items-baseline` row in a
+   1fr grid column (blox/pricing/component.jsx). A single unbreakable token
+   (placeholder TODO_PRICE) then wins over the column: MEASURED 291px inside a
+   224px column at 320px -> scrollW 384 vs 320 (+64px) on every page with a
+   pricing block (ar/en home, city, pricing). Let the column win instead.
+   --------------------------------------------------------------------------- */
+#section-pricing .flex.items-baseline {
+  flex-wrap: wrap;
+}
+
+#section-pricing .flex.items-baseline > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------------------
+   Blog list decorative hover backdrop bleeds past the viewport.
+
+   The card's hover highlight is an absolutely-positioned layer with physical
+   negative insets (-inset-x-4, sm:-inset-x-6). Once the list is full-bleed at
+   <=1023px nothing absorbs that bleed: MEASURED +16px page scroll at 320/375/414
+   and +24px at 768 (scrollW 792 vs 768). Collapse the bleed below lg; at lg+ the
+   centred max-w-prose column has ample margin to absorb it.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .page-body .absolute[class~="-inset-x-4"] {
+    inset-inline: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Skip link (layouts/baseof.html). Off-screen until focused, revealed at the
+   inline start. Plain CSS so it never depends on Tailwind variant generation.
+   --------------------------------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  inset-inline-start: -9999px;
+  top: 0;
+  z-index: 50;
+}
+
+.skip-link:focus {
+  inset-inline-start: 0.5rem;
+  top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  color: #1d4ed8;
+  font-weight: 600;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}

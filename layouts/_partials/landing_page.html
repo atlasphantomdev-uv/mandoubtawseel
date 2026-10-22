@@ -1,0 +1,25 @@
+{{/* Project override of the module's landing_page.html.
+     Adds a semantic-h1 guard: the theme derives a landing page's <h1> from the
+     `hero` block only, so a landing page whose sections are all non-hero blocks
+     (e.g. /اتصل-بنا/ and /en/contact/ = a single `contact-info` block) renders
+     ZERO <h1> — measured h1count=0 across all widths. Emit a visually-hidden <h1>
+     from the page title for those pages so every page has exactly one <h1>.
+     ponytail: re-sync with blox/layouts/_partials/landing_page.html on upgrade. */}}
+{{- $sections := partial "hbx/sections.html" . -}}
+{{- $has_h1_block := false -}}
+{{- range $sections -}}
+  {{- if eq (printf "%v" .block) "hero" -}}{{- $has_h1_block = true -}}{{- end -}}
+{{- end -}}
+{{- if not $has_h1_block -}}
+  {{- with .Title -}}<h1 class="sr-only">{{ . | plainify }}</h1>{{- end -}}
+{{- end -}}
+
+{{ range $index, $block := $sections }}
+  {{/* Do not show sections intended only for the demo site. */}}
+  {{ if or (not $block.demo) ($block.demo | and (eq (os.Getenv "HUGO_BLOX_DEMO") "true")) }}
+    {{ partial "functions/parse_block_v3" (dict "page" $ "block" $block) }}
+    {{ if eq (printf "%v" $block.block) "map" }}
+      {{ partial "components/coverage-links.html" $block }}
+    {{ end }}
+  {{ end }}
+{{ end }}

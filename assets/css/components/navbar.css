@@ -77,9 +77,11 @@ input#nav-toggle:checked ~ #nav-menu {
 
 .nav-dropdown-list {
   @apply bg-white dark:bg-slate-900 z-10 min-w-[180px] rounded py-4 shadow hidden lg:invisible lg:absolute lg:block lg:opacity-0;
-  /* Ensure dropdown appears above content and under header */
+  /* Ensure dropdown appears above content and under header.
+     Logical inset so the panel opens inward in RTL (was physical `left: 0`, which
+     pushed the menu off the right edge on the Arabic pages). */
   top: 100%;
-  left: 0;
+  inset-inline-start: 0;
 }
 
 .nav-dropdown.active .nav-dropdown-list {

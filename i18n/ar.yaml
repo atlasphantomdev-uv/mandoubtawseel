@@ -78,3 +78,17 @@
 
 - id: block_contact_form_submit
   translation: إرسال الطلب
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Leaked English UI chrome on the Arabic pages.
+# `read_more` is absent from the module's ar.yaml, so the blog list rendered the
+# English fallback ("Read more") next to Arabic titles — verified on /مدونة/.
+# `skip_to_content` is the a11y skip link added in layouts/baseof.html.
+# ─────────────────────────────────────────────────────────────────────────────
+
+- id: read_more
+  translation: اقرأ المزيد
+
+- id: skip_to_content
+  translation: تخطَّ إلى المحتوى الرئيسي
+

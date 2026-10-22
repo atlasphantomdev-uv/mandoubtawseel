@@ -48,12 +48,30 @@ function renderInline(text) {
     .replace(/\*(.*?)\*/g, "<em>$1</em>");
 }
 
+// ponytail: the quote escape uses /\x22/ (hex) instead of a literal quote on purpose.
+// Hugo's tailwind_sources.html harvests class candidates by regex-matching every
+// double-quoted span in this file, so one lone literal quote makes the next quote on a
+// later line close the match; the resulting multi-line token is emitted as an
+// @source inline() rule and Tailwind dies with Unterminated string. Behaviour identical.
 function escapeHtml(text) {
   return String(text ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/\x22/g, "&quot;");
+}
+
+// Marker URLs come straight from front matter (e.g. /مندوب-توصيل-في-دبي/) and are
+// not passed through Hugo's relURL, so on a sub-path deployment they resolved against
+// the domain root and 404'd. Prefix the site base path, which the theme exposes on
+// the html element as data-hbb-relurl.
+function resolveUrl(url) {
+  if (!url || typeof url !== "string") return url;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(url) || url.indexOf("//") === 0) return url;
+  if (typeof document === "undefined") return url;
+  const base = (document.documentElement && document.documentElement.dataset && document.documentElement.dataset.hbbRelurl) || "/";
+  const clean = url.charAt(0) === "/" ? url.slice(1) : url;
+  return (base.charAt(base.length - 1) === "/" ? base : base + "/") + clean;
 }
 
 function directionsUrl(location, override) {
@@ -125,7 +143,7 @@ function MapCanvas({location, zoom, markers, provider, style, interactive, attri
         const popupHtml = [
           m.title ? `<strong>${escapeHtml(m.title)}</strong>` : "",
           m.description ? `<div class="mt-1 text-sm">${escapeHtml(m.description)}</div>` : "",
-          m.url ? `<div class="mt-2"><a class="text-primary-600 underline" href="${escapeHtml(m.url)}">View details →</a></div>` : "",
+          m.url ? `<div class="mt-2"><a class="text-primary-600 underline" href="${escapeHtml(resolveUrl(m.url))}">View details →</a></div>` : "",
         ]
           .filter(Boolean)
           .join("");
@@ -166,13 +184,14 @@ function MapCanvas({location, zoom, markers, provider, style, interactive, attri
   return <div ref={ref} class="w-full h-full bg-gray-100 dark:bg-gray-800" aria-label="Map" role="img" />;
 }
 
-function AddressCard({content, location, ctaUrl, dark}) {
+function AddressCard({content, location, ctaUrl, dark, markers}) {
   const {title, subtitle, cta = {}} = content;
   const addressLines = (location?.address || "")
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
   const hasItems = addressLines.length > 0 || cta.phone || cta.email;
+  const links = (markers || []).filter((m) => m && m.title && m.url);
 
   return (
     <div class={`flex flex-col justify-center p-6 sm:p-8 ${dark ? "bg-gray-900 text-white" : "bg-white dark:bg-gray-800"}`}>
@@ -184,6 +203,23 @@ function AddressCard({content, location, ctaUrl, dark}) {
       )}
       {subtitle && (
         <p class="text-base text-gray-600 dark:text-gray-400 mb-6" dangerouslySetInnerHTML={{__html: renderInline(subtitle)}} />
+      )}
+
+      {/* Coverage links: real anchors so the emirate list is navigable, indexable
+          and keyboard-reachable independently of the interactive map. */}
+      {links.length > 0 && (
+        <ul class="flex flex-wrap gap-x-3 gap-y-2 mb-6">
+          {links.map((m, i) => (
+            <li key={i}>
+              <a
+                href={resolveUrl(m.url)}
+                class="inline-flex items-center gap-1 rounded-full border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-gray-700 dark:text-gray-300 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              >
+                {m.title}
+              </a>
+            </li>
+          ))}
+        </ul>
       )}
 
       {hasItems && (
@@ -299,7 +335,7 @@ export const MapBlock = ({content = {}, design = {}, provider}) => {
     <div class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
         <div class={`grid grid-cols-1 lg:grid-cols-2 overflow-hidden ${radius} ${borderShadow}`}>
-          <AddressCard content={content} location={location} ctaUrl={ctaUrl} />
+          <AddressCard content={content} location={location} ctaUrl={ctaUrl} markers={markers} />
           <div class={`relative ${heightCls} order-first lg:order-last`}>
             <MapCanvas
               location={location}

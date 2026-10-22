@@ -1,0 +1,27 @@
+{{/* Server-rendered coverage links for the `map` block.
+     The interactive map is a MapLibre canvas rendered by client JS from data-props;
+     with JS off (or WebGL/tiles unavailable) the coverage section is a blank panel and
+     the city links exist nowhere in the document. Emit a plain <ul> of the same
+     markers inside <noscript> colocated with the map so the links survive without JS.
+     Input: the parsed map section (`.content.markers`). */}}
+{{ $content := .content | default dict }}
+{{ $markers := $content.markers | default slice }}
+{{ $links := slice }}
+{{ range $markers }}
+  {{ if and .title .url }}{{ $links = $links | append . }}{{ end }}
+{{ end }}
+{{ with $links }}
+{{/* NB: `relURL` left these bare (`/مندوب-…/`) and dropped the /mandoubtawseel/ base
+     path, so build the prefix explicitly from the site root. */}}
+{{ $base := "" | relURL }}
+<noscript>
+  <div class="py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      {{ with $content.title }}<h2 class="text-2xl font-bold text-heading mb-4">{{ . | plainify }}</h2>{{ end }}
+      <ul class="flex flex-wrap gap-x-4 gap-y-2">
+        {{ range . }}<li><a class="underline text-body" href="{{ printf "%s%s" $base (strings.TrimPrefix "/" .url) }}">{{ .title }}</a></li>{{ end }}
+      </ul>
+    </div>
+  </div>
+</noscript>
+{{ end }}
