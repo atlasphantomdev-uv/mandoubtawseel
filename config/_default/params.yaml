@@ -229,7 +229,11 @@ hugoblox:
   # Search engine site verification codes
   # ────────────────────────────────────────────────────────────────────────────
   verification:
-    google: ""
+    # Google Search Console (meta-tag method). Google's HTML-file method failed
+    # because a GH Pages *project* site can't serve files at the domain root;
+    # the meta tag is emitted by blox-analytics/verification on every page
+    # (incl. the home page), which is what GSC fetches.
+    google: "8-IaL8hK-ByV_XeG87fTI77t8chxdCEAcrC9uMliP-0"
     bing: ""
     baidu: ""
     yandex: ""
