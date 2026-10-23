@@ -342,3 +342,100 @@ html[dir="rtl"] .hero-block-container a span[aria-hidden="true"] {
     display: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Dark mode — responds to the `.dark` class the navbar theme toggle sets on
+   <html> (localStorage wc-color-theme -> hb-head.js).
+
+   Why this block exists: the design system ships light-first (params.yaml
+   mode: light) and these surface tokens are HEX-LOCKED, so toggling dark used
+   to fire Tailwind `dark:` text utilities (text -> white) while every surface
+   stayed #fff -> MEASURED 1.0:1 (invisible headings). The theme's generated
+   inline `.dark` block also falls back to the light params.surfaces because
+   pack: "default" has no dark pack, so the --hb-color-* vars were restated
+   light there too.
+
+   Fix: `html.dark` (element+class = 0,1,1) beats the generated `.dark{}` (0,1,0)
+   so these vars win regardless of cascade order; each hex-locked surface gets
+   an explicit `.dark .surface-*` counterpart (0,2,0). Palette mirrors the light
+   page/band/panel alternation with neutral gray-950/900/800; the hero/final CTA
+   (surface-dark) shifts to a brand navy so it stays distinct from the neutral
+   band it now sits beside. White-on-dark text clears >=7:1 throughout.
+   --------------------------------------------------------------------------- */
+html.dark {
+  --hb-color-background: #030712; /* gray-950 page */
+  --hb-color-foreground: #f9fafb; /* gray-50 body text */
+  --hb-color-header-bg: #030712;
+  --hb-color-header-fg: #f9fafb;
+  --hb-color-footer-bg: #111827; /* gray-900 */
+  --hb-color-footer-fg: #e5e7eb; /* gray-200 */
+}
+
+.dark .surface-page {
+  background-color: #030712;
+  color: #f9fafb;
+}
+
+.dark .surface-band {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+.dark .surface-panel {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+.dark .surface-field {
+  background-color: #111827;
+  border-color: #6b7280;
+  color: #f9fafb;
+}
+
+/* Hero + final CTA stay the high-impact moment, tinted to the brand blue so
+   they don't blend into the neutral surface-band beside them. */
+.dark .surface-dark {
+  background-color: #172554;
+  color: #ffffff;
+}
+
+.dark .text-heading {
+  color: #f9fafb;
+}
+
+.dark .text-body {
+  color: #d1d5db;
+}
+
+.dark .divider-line {
+  border-color: #374151;
+}
+
+.dark .card-accent {
+  background-color: #042f2e;
+  border-color: #115e59;
+}
+
+.dark .cards-paneled .grid > div {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+.dark .cards-paneled .grid > div:nth-child(4),
+.dark .cards-paneled .grid > div:nth-child(5) {
+  background-color: #042f2e;
+  border-color: #115e59;
+}
+
+.dark #section-contact-info input:not([type="hidden"]),
+.dark #section-contact-info textarea,
+.dark #section-contact-info select {
+  background-color: #111827;
+  border-color: #6b7280;
+  color: #f9fafb;
+}
+
+.dark #section-contact-info input::placeholder,
+.dark #section-contact-info textarea::placeholder {
+  color: #9ca3af;
+}

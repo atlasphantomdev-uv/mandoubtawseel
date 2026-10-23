@@ -34,10 +34,11 @@ hugoblox:
   # Color and visual design system
   # ────────────────────────────────────────────────────────────────────────────
   theme:
-    # Mode: 'light', 'dark', or 'system' (follows OS preference)
-    # Locked to 'light' for the client light design system: dark is reserved for
-    # explicit high-impact sections (hero, final CTA) via design.background.text_color_light,
-    # never inherited from OS preference.
+    # Mode: 'light', 'dark', or 'system' = the DEFAULT on first load.
+    # Kept 'light' per the client light-first design; the navbar theme toggle
+    # switches to dark at runtime (localStorage wc-color-theme). Dark surfaces/
+    # text live in assets/css/hbx/blocks/design-system/style.css (html.dark vars +
+    # .dark .surface-* overrides), so both modes render a readable theme in AR & EN.
     mode: light
     # Theme pack: name from data/themes/ or { light: "x", dark: "y" } for mix-and-match
     pack: "default"
