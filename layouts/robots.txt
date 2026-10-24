@@ -1,8 +1,3 @@
 User-agent: *
 
-# GSC's fetcher intermittently fails on the GitHub Pages edge (known bug, GitHub
-# Community #199426). The sitemap is therefore served from jsDelivr's CDN, which
-# pulls this exact repo — same GitHub source, fetchable by GSC. Cross-host
-# sitemaps are protocol-legal when referenced from robots.txt: the sitemap only
-# lists URLs of this host. The local copy remains on disk at /sitemap.xml.
 Sitemap: https://cdn.jsdelivr.net/gh/atlasphantomdev-uv/mandoubtawseel@main/sitemap.xml
