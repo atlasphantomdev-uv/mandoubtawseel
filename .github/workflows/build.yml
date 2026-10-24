@@ -18,7 +18,7 @@ on:
 
 # Read-only permissions for security
 permissions:
-  contents: read
+  contents: write
 
 # Prevent duplicate builds for the same PR
 concurrency:
@@ -140,6 +140,23 @@ jobs:
         if [ -f "package.json" ] && grep -q "pagefind" package.json; then
           pnpm run pagefind || npx pagefind --site "public"
         fi
+
+    # Publish the flat all-language sitemap to the repo root so jsDelivr can serve
+    # it (GSC's fetcher fails on the Pages edge; see layouts/robots.txt). Only on
+    # main pushes; [skip ci] prevents a rebuild loop.
+    - name: Publish flat sitemap for jsDelivr
+      if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+      run: |
+        cp public/allsitemap.xml sitemap.xml
+        if [ -z "$(git status --porcelain sitemap.xml)" ]; then
+          echo "sitemap.xml unchanged, nothing to commit"
+          exit 0
+        fi
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add sitemap.xml
+        git commit -m "chore(sitemap): refresh flat sitemap [skip ci]" || echo "nothing to commit"
+        git push origin HEAD:main || echo "push skipped (read-only token)"
 
     - name: Upload artifact
       id: upload

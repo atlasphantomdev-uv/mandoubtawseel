@@ -47,8 +47,13 @@ enableInlineShortcodes: true
 # even the meta-refresh alias pages — which are the only way to serve the hamza
 # spelling variants (أبوظبي vs ابوظبي) on Pages. Must stay false.
 disableAliases: false
+outputFormats:
+  AllSitemap:
+    mediaType: application/xml
+    baseName: allsitemap
+    noUgly: true
 outputs:
-  home: [HTML, RSS, WebAppManifest, headers, redirects, backlinks, LLM]
+  home: [HTML, RSS, WebAppManifest, headers, redirects, backlinks, LLM, AllSitemap]
   page: [HTML]
   section: [HTML, RSS]
 imaging:

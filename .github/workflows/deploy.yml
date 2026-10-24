@@ -7,9 +7,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab on GitHub
   workflow_dispatch:
 
-# Provide permission to clone the repo and deploy it to GitHub Pages
+# Provide permission to clone the repo and deploy it to GitHub Pages.
+# contents: write lets build.yml commit the flat sitemap (jsDelivr) back to main.
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
