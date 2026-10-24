@@ -9,6 +9,7 @@ keywords:
   - توصيل نفس اليوم
   - تطبيق مندوب توصيل
 type: landing
+translationKey: services
 date: 2026-10-14
 
 # Surface contract (never two adjacent dark blocks):

@@ -9,6 +9,7 @@ keywords:
   - توصيل في دبي
   - توصيل في أبوظبي
 type: landing
+translationKey: coverage
 date: 2026-10-14
 
 # Surface contract (never two adjacent dark blocks):

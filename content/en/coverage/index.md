@@ -8,6 +8,7 @@ keywords:
   - courier Abu Dhabi
   - delivery emirates
 type: landing
+translationKey: coverage
 date: 2026-10-14
 
 # Surface contract (never two adjacent dark blocks):

@@ -52,16 +52,15 @@
   <meta name="description" content="{{ $desc | plainify }}" />
   {{ with .Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}" />{{ end }}
 
-  {{/* hreflang: only for pages that actually have a translation. Every alternate
-       uses the BCP-47 locale (ar-ae / en-us) so both sides emit an identical
-       reciprocal set. x-default is the Arabic homepage (default language, root). */}}
-  {{ if .IsTranslated }}
+  {{/* hreflang: every page emits itself + x-default; translated pages also emit
+       their alternates. BCP-47 locales (ar-ae / en-us) match the sitemap override
+       (layouts/_default/sitemap.xml) so head and sitemap never disagree.
+       x-default is the Arabic homepage (default language, root). */}}
+  <link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}" />
+  {{ range .Translations }}
     <link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}" />
-    {{ range .Translations }}
-      <link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}" />
-    {{ end }}
-    <link rel="alternate" hreflang="x-default" href="{{ site.BaseURL }}" />
   {{ end }}
+  <link rel="alternate" hreflang="x-default" href="{{ site.BaseURL }}" />
 
   {{/* Hugo Blox Theme Engine Initialization */}}
   {{/* Uses get_theme_config helper for backward-compatible config resolution */}}

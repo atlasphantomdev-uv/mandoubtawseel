@@ -8,6 +8,7 @@ keywords:
   - delivery rider jobs
   - courier Dubai
 type: landing
+translationKey: jobs
 date: 2026-10-14
 
 # Surface contract (never two adjacent dark blocks):

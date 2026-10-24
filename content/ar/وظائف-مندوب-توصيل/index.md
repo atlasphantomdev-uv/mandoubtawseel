@@ -11,6 +11,7 @@ keywords:
   - عمل مندوب توصيل بدوام جزئي
 url: /وظائف-مندوب-توصيل/
 type: landing
+translationKey: jobs
 date: 2026-10-14
 
 # FAQPage schema is emitted from `faqs:` below (jsonld/main.html checks

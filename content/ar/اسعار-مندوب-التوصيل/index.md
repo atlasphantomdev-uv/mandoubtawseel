@@ -9,6 +9,7 @@ keywords:
   - أسعار التوصيل في الإمارات
   - تكلفة التوصيل
 type: landing
+translationKey: pricing
 date: 2026-10-14
 
 # Surface contract (never two adjacent dark blocks):
