@@ -16,6 +16,8 @@ type: landing
 date: 2026-10-14
 
 # ── Block order is frozen: 9 sections, dark only at #1 (hero) and #9 (final CTA).
+# The markdown block at #4 is server-rendered (block-fallback confirms it), so its
+# long-form pillar copy ships in the raw HTML for no-JS crawlers (GPTBot, ClaudeBot…).
 # The client-approved "surface contract" lives in
 # assets/css/hbx/blocks/design-system/style.css — each section sets ONE surface
 # class via `design.css_class` (applied to the <section> wrapper).
@@ -115,7 +117,45 @@ sections:
       # The accent for توصيل فوري / توصيل نفس اليوم is applied positionally (items 4 and 5).
       css_class: surface-band cards-paneled
 
-  # 4 ─ PRICING (white page + white panel; single dark/solid CTA per tier)
+  # 4 ─ THE STORY (long-form pillar for the head term مندوب التوصيل)
+  - block: markdown
+    content:
+      title: "مندوب التوصيل: كيف تعمل الخدمة وكم تكلف فعليًا؟"
+      text: |
+        مندوب التوصيل هو الشخص الذي يربط بين نقطة الاستلام ونقطة التسليم، ويستلم طلبك —
+        مستندًا كان أم طردًا أم مشتريات — ويوصّله خلال الوقت المتفق عليه. في الإمارات
+        يعمل المندوب بالدراجة داخل الأحياء المتقاربة وبالسيارة بين الإمارات، وتتحكم
+        المسافة وحركة الطرق في السعر والوقت أكثر من أي عامل آخر.
+
+        **كم يكلف مندوب التوصيل؟** السعر الأساسي ثابت في كل المدن: مستند أو طرد صغير
+        يبدأ من **15 درهمًا**. الفرق يظهر في الطرود الأكبر والرحلات الأطول:
+
+        - **دبي:** مستند 15 درهمًا، طرد بين ديرة والبرشاء 22 درهمًا.
+        - **أبوظبي:** مستند 15 درهمًا، طرد بين الخالدية ومدينة زايد 22 درهمًا.
+        - **الشارقة:** طرد بين المجاز والتعاون 18 درهمًا.
+        - **عجمان:** طرد بين الراشدية والنعيمية 17 درهمًا.
+        - **العين:** طرد بين الجاهلي والمقام 18 درهمًا.
+        - **رأس الخيمة:** طرد بين النخيل والجزيرة الحمراء 18 درهمًا.
+        - **أم القيوين:** طرد بين الرأس والسلمة 17 درهمًا.
+        - **الفجيرة:** طرد بين مربح والفجيرة القديمة 17 درهمًا.
+
+        لماذا دبي وأبوظبي أغلى؟ لأن المسافة داخل المدينة أكبر والزحام أعلى، فيضطر
+        المندوب إلى رحلة أطول لنفس الطرد. لهذا تتكلف الرحلة الفورية أكثر من نفس اليوم:
+        فورية تعني مندوبًا مخصصًا لطلبك خلال الساعة، بينما نفس اليوم يجمّع الطلبات في
+        جولة واحدة.
+
+        **كم يستغرق التوصيل؟** الفوري بين 30 و70 دقيقة حسب المدينة، ونفس اليوم عند
+        الطلب قبل الظهر. أبوظبي أبطأ نسبيًا (40–70 دقيقة) لأنها أكثر تباعدًا من دبي،
+        بينما عجمان وأم القيوين الأسرع (30–50 دقيقة) لتقارب أحيائها.
+
+        **كيف تختار مندوب التوصيل المناسب؟** تحقق من ثلاثة أشياء: التغطية (هل يصل
+        لحيّك؟)، ووضوح السعر (رقم قبل الطلب وليس تقديرًا بعده)، وطريقة التتبع. نحن
+        نغطي جميع الإمارات السبع والعين، ونؤكد السعر قبل التحرك، ونرسل تحديثات الحالة
+        عبر واتساب حتى الاستلام.
+    design:
+      css_class: surface-page
+
+  # 5 ─ PRICING (white page + white panel; single dark/solid CTA per tier)
   - block: pricing
     content:
       title: أسعار مندوب التوصيل
@@ -162,7 +202,7 @@ sections:
     design:
       css_class: surface-page
 
-  # 5 ─ STEPS (white page, thin dividers between numbered rows)
+  # 6 ─ STEPS (white page, thin dividers between numbered rows)
   - block: steps
     content:
       title: كيف أطلب مندوب توصيل؟
@@ -195,7 +235,7 @@ sections:
       marker_style: number
       connector: line
 
-  # 6 ─ UAE COVERAGE MAP (white page). 7 emirates + Al Ain, each marker links to
+  # 7 ─ UAE COVERAGE MAP (white page). 7 emirates + Al Ain, each marker links to
   # its city page (server-rendered <noscript> list backs the interactive map).
   - block: map
     content:
@@ -239,7 +279,7 @@ sections:
       layout: side-by-side
       height: md
 
-  # 7 ─ FAQ (neutral band)
+  # 8 ─ FAQ (neutral band)
   - block: faq
     content:
       title: أسئلة شائعة عن مندوب التوصيل
@@ -283,7 +323,7 @@ sections:
     design:
       css_class: surface-band
 
-  # 8 ─ FINAL CTA (dark, the second and last allowed dark moment)
+  # 9 ─ FINAL CTA (dark, the second and last allowed dark moment)
   - block: cta-card
     content:
       title: جاهز لطلب مندوب توصيل؟
