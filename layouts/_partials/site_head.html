@@ -146,7 +146,9 @@
   <link rel="canonical" href="{{ .Permalink }}" />
 
   {{/* Get page image for sharing. */}}
-  {{ $sharing_image := resources.GetMatch (path.Join "media" "sharing.*") }}
+  {{/* og:image carries a descriptive filename (not "sharing.png") so social
+       scrapers and image search see a meaningful, keyword-bearing asset name. */}}
+  {{ $sharing_image := resources.GetMatch (path.Join "media" "mandoub-tawseel-courier-delivery-uae.*") }}
   {{ $featured_image := partial "functions/get_featured_image" . }}
 {{ $avatar_image := (.Resources.ByType "image").GetMatch "avatar*" }}
   {{ $has_logo := fileExists "assets/media/logo.png" | or (fileExists "assets/media/logo.svg") }}
@@ -207,7 +209,11 @@
   <meta property="og:description" content="{{ $desc }}" />
   {{- with $og_image -}}
     <meta property="og:image" content="{{ . }}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="مندوب التوصيل في الإمارات — توصيل فوري وبنفس اليوم" />
     <meta name="twitter:image" content="{{ . }}" />
+    <meta name="twitter:image:alt" content="مندوب التوصيل في الإمارات — توصيل فوري وبنفس اليوم" />
   {{- end -}}
   {{ $loc := site.Language.Locale | default "en-us" }}
   {{ $ps := split $loc "-" }}
