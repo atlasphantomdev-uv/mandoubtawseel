@@ -192,7 +192,7 @@
          (~62 chars); otherwise the page title alone is the shorter, complete one.
          Rune count, not byte count — Arabic titles are multi-byte in Go's len. */}}
     {{ $withBrand := printf "%s | %s" $title $branding.site_title }}
-    {{ if and (ne $title $branding.site_title) (le (strings.RuneCount $withBrand) 62) }}{{ $title = $withBrand }}{{ end }}
+    {{ if and (ne $title $branding.site_title) (le (strings.RuneCount $withBrand) 58) }}{{ $title = $withBrand }}{{ end }}
   {{ end }}
   <meta name="twitter:card" content="{{ $twitter_card }}" />
   <meta name="twitter:title" content="{{ $title }}" />
