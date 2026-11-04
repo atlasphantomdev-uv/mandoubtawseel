@@ -188,7 +188,11 @@
     {{ $title = replace . "{brand}" $branding.site_title }}
   {{ else }}
     {{ $title = .Title | default $branding.site_title }}
-    {{ if ne $title $branding.site_title }}{{ $title = printf "%s | %s" $title $branding.site_title }}{{ end }}
+    {{/* Append the brand only when the result still fits a SERP title
+         (~62 chars); otherwise the page title alone is the shorter, complete one.
+         Rune count, not byte count — Arabic titles are multi-byte in Go's len. */}}
+    {{ $withBrand := printf "%s | %s" $title $branding.site_title }}
+    {{ if and (ne $title $branding.site_title) (le (strings.RuneCount $withBrand) 62) }}{{ $title = $withBrand }}{{ end }}
   {{ end }}
   <meta name="twitter:card" content="{{ $twitter_card }}" />
   <meta name="twitter:title" content="{{ $title }}" />
