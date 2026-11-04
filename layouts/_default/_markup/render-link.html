@@ -1,0 +1,23 @@
+{{- /* Prefix root-relative markdown destinations for sub-path deployments.
+
+       Why this exists (measured on the local build of the GitHub Pages project
+       site `…/mandoubtawseel/`, 2026-10-25): Goldmark emits links verbatim, so
+       an author writing `[خطوط التوصيل](/خطوط-التوصيل/)` produced
+       `href=/خطوط-التوصيل/`, which resolves against the domain root and 404s.
+       Across 39 built pages that was 34 distinct targets and ~130 occurrences —
+       the single largest source of broken internal links on the site, and the
+       reason crawl equity leaked out of the city/service/route clusters.
+
+       External URLs, protocol-relative URLs, mailto:/tel:, and pure-fragment
+       links pass through untouched. Hugo's `relURL` is avoided on purpose: it
+       silently drops the base path for non-ASCII paths (see
+       components/coverage-links.html), so the prefix is concatenated manually.
+
+       Idempotent: a destination that already carries the base path is left
+       alone, so content may use either form. */ -}}
+{{- $dest := .Destination -}}
+{{- $prefix := (urls.Parse site.BaseURL).Path -}}
+{{- if and (hasPrefix $dest "/") (not (hasPrefix $dest "//")) (ne $prefix "/") (not (hasPrefix $dest $prefix)) -}}
+  {{- $dest = printf "%s%s" $prefix (strings.TrimPrefix "/" $dest) -}}
+{{- end -}}
+<a href="{{ $dest }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>

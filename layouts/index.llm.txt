@@ -1,0 +1,50 @@
+{{/* Project override of the theme's llms.txt.
+     The stock file only carried the allow/contact lines, so an assistant that
+     fetched it learned nothing about the site. This version keeps those lines
+     and adds a page index, which is what llms.txt is for: one URL per answer-
+     bearing page, with the page's own description, so retrieval systems can go
+     straight to /مندوب-توصيل-في-دبي/ instead of guessing.
+     ponytail: re-sync with blox/layouts/index.llm.txt on upgrade. */}}
+{{- $cfg := site.Params.hugoblox.seo.ai | default dict -}}
+{{- $allows := $cfg.allow | default (slice "/") -}}
+{{- $disallows := $cfg.disallow | default slice -}}
+{{- $groups := slice
+  (dict "title" "الصفحات الرئيسية" "section" "")
+  (dict "title" "الخدمات" "section" "خدمات")
+  (dict "title" "خطوط التوصيل بين الإمارات" "section" "خطوط-التوصيل")
+  (dict "title" "المدونة" "section" "مدونة")
+-}}
+# llms.txt — Mandoub Tawseel / مندوب توصيل في الإمارات
+> خدمة مندوب توصيل في دبي وأبوظبي والشارقة وجميع الإمارات: توصيل فوري وتوصيل في نفس اليوم للمستندات والطلبات والطرود. الأسعار تبدأ من 15 درهماً، والعمل يوميًا 8:00 صباحًا – 11:00 مساءً.
+{{- with $cfg.contact }}
+contact: {{ . }}
+{{- end }}
+{{- with $cfg.policy_url }}
+policy: {{ . }}
+{{- end }}
+{{- range $allows }}
+allow: {{ . }}
+{{- end }}
+{{- range $disallows }}
+disallow: {{ . }}
+{{- end }}
+
+{{ range $g := $groups }}
+  {{- $pages := where site.RegularPages "Section" $g.section -}}
+  {{- if eq $g.section "" }}
+## {{ $g.title }}
+
+- [{{ site.Home.Title | plainify }}]({{ "" | absURL }}): {{ site.Home.Description | plainify }}
+    {{- range $pages }}
+- [{{ .Title | plainify }}]({{ .Permalink }}): {{ .Description | plainify }}
+    {{- end }}
+  {{- else }}
+    {{- with $pages }}
+## {{ $g.title }}
+
+      {{- range . }}
+- [{{ .Title | plainify }}]({{ .Permalink }}): {{ .Description | plainify }}
+      {{- end }}
+    {{ end }}
+  {{- end }}
+{{- end }}

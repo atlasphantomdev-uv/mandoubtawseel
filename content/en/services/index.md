@@ -1,6 +1,6 @@
 ---
 title: "Courier Services in the UAE | Delivery & Express"
-description: "Courier and delivery services in the UAE: restaurant orders, documents, vehicles, express, same-day and cheap delivery plus a booking app. Prices from AED 15."
+description: "Courier and delivery services in the UAE: restaurant orders, documents, vehicles, express, same-day and cheap delivery. Prices from AED 15."
 keywords:
   - courier services UAE
   - delivery service

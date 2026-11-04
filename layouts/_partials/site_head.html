@@ -112,6 +112,13 @@
   {{ with $icon.resource }}
     <link rel="icon" type="{{ $icon.type }}" href="{{ .RelPermalink }}" />
   {{ end }}
+  {{/* PNG 32px fallback — Safari < 16, older Edge and most crawler favicon
+       fetchers still ignore image/svg+xml. Same 512px source as the Apple icon. */}}
+  {{ with resources.Get "media/icon.png" }}
+    {{ with .Resize "32x32" }}
+      <link rel="icon" type="image/png" sizes="32x32" href="{{ .RelPermalink }}" />
+    {{ end }}
+  {{ end }}
   {{/* Apple Touch Icon - requires PNG */}}
   {{ $icon_apple := partial "functions/get_site_icon" 180 }}
   {{ if not $icon_apple.is_svg }}

@@ -1,6 +1,6 @@
 ---
 title: "Contact us | Courier in the UAE"
-description: "Get in touch with our courier delivery service in the UAE. Book a courier on WhatsApp or fill in the booking form — express and same-day delivery across the UAE."
+description: "Contact our courier delivery service in the UAE. Book on WhatsApp or use the booking form for express and same-day delivery."
 keywords:
   - contact us
   - courier UAE

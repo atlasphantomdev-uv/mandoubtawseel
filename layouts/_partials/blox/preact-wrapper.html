@@ -219,6 +219,17 @@
   {{ end }}
 {{ end }}
 
+{{/* Sub-path deployments (GitHub Pages project sites, /mandoubtawseel/): blox
+     components render `content.*.url` verbatim, so every block link pointed at
+     the domain root and 404'd (measured: 9 of 47 internal links on
+     /مندوب-توصيل-في-دبي/, curl 404 for /اتصل-بنا/, /وظائف-مندوب-توصيل/, /).
+     Prefix them once here, for every block type except `map` (its client JS
+     already applies data-hbb-relurl, so prefixing twice would double the path). */}}
+{{ $prefix := (urls.Parse site.BaseURL).Path }}
+{{ if ne $block_type "map" }}
+  {{ $props = merge $props (dict "content" (partial "functions/relurl-deep.html" (dict "v" $block.content "prefix" $prefix))) }}
+{{ end }}
+
 {{/* Convert props to JSON for client-side rendering */}}
 {{ $propsJSON := $props | jsonify }}
 
@@ -265,11 +276,17 @@
           {{ with $title }}<h1 class="text-3xl sm:text-4xl font-bold mt-3">{{ . | plainify }}</h1>{{ end }}
           {{ with $c.text }}<p class="mt-4 text-lg">{{ . | plainify }}</p>{{ end }}
           <p class="mt-8 flex flex-wrap gap-3 justify-center">
-            {{ with $c.primary_action }}
-              {{ with .url }}<a class="underline font-semibold" href="{{ cond (strings.HasPrefix . "http") . (. | relURL) }}">{{ $c.primary_action.text }}</a>{{ end }}
-            {{ end }}
-            {{ with $c.secondary_action }}
-              {{ with .url }}<a class="underline" href="{{ cond (strings.HasPrefix . "http") . (. | relURL) }}">{{ $c.secondary_action.text }}</a>{{ end }}
+            {{/* `relURL` drops the base path for non-ASCII URLs — concat instead. */}}
+            {{ range $act := slice $c.primary_action $c.secondary_action }}
+              {{ with $act }}
+                {{ with .url }}
+                  {{ $href := . }}
+                  {{ if and (hasPrefix $href "/") (not (hasPrefix $href "//")) (ne $prefix "/") (not (hasPrefix $href $prefix)) }}
+                    {{ $href = printf "%s%s" $prefix (strings.TrimPrefix "/" $href) }}
+                  {{ end }}
+                  <a class="underline" href="{{ $href }}">{{ $act.text }}</a>
+                {{ end }}
+              {{ end }}
             {{ end }}
           </p>
         </div>
@@ -306,7 +323,14 @@
                       {{ $styleKey := .style | default $act.d }}
                       {{ $cls := index $actionStyles $styleKey | default (index $actionStyles $act.d) }}
                       {{ $external := or (strings.HasPrefix .url "http://") (strings.HasPrefix .url "https://") }}
-                      <a class="inline-flex items-center gap-2 {{ $cls }}" href="{{ .url }}"{{ if $external }} target="_blank" rel="noopener"{{ end }}><span>{{ .text | plainify }}</span>{{ with $act.icon }}{{/* mirrors ActionButton -> Icon: outer inline-flex span, inner span sized to 1em, svg filled to 100% of it */}}<span class="inline-flex"><span style="height: 1em" class="inline-block">{{ . | replaceRE `^(<svg\b)` `${1} style="height:100%;width:auto"` | safeHTML }}</span></span>{{ end }}{{ if and (eq $styleKey "text") (not $act.icon) }}<span aria-hidden="true">→</span>{{ end }}</a>
+                      {{/* Same sub-path rule as functions/relurl-deep.html: front-matter
+                           URLs are emitted verbatim by blox, and this inline SSR used to
+                           do the same, so /en/contact/ pointed at the domain root. */}}
+                      {{ $href := .url }}
+                      {{ if and (hasPrefix $href "/") (not (hasPrefix $href "//")) (ne $prefix "/") (not (hasPrefix $href $prefix)) }}
+                        {{ $href = printf "%s%s" $prefix (strings.TrimPrefix "/" $href) }}
+                      {{ end }}
+                      <a class="inline-flex items-center gap-2 {{ $cls }}" href="{{ $href }}"{{ if $external }} target="_blank" rel="noopener"{{ end }}><span>{{ .text | plainify }}</span>{{ with $act.icon }}{{/* mirrors ActionButton -> Icon: outer inline-flex span, inner span sized to 1em, svg filled to 100% of it */}}<span class="inline-flex"><span style="height: 1em" class="inline-block">{{ . | replaceRE `^(<svg\b)` `${1} style="height:100%;width:auto"` | safeHTML }}</span></span>{{ end }}{{ if and (eq $styleKey "text") (not $act.icon) }}<span aria-hidden="true">→</span>{{ end }}</a>
                     {{ end }}
                   {{ end }}
                 {{ end }}
@@ -323,6 +347,14 @@
         </div>
       </div>
     {{ end }}
+  {{ end }}
+
+  {{/* No-JS fallback: the block copy above only exists as JSON in data-props.
+       Emit it as semantic HTML inside <noscript> so non-JS crawlers get the
+       page text and internal links. Preact's render() replaces container
+       children on mount, so the live DOM is unaffected. */}}
+  {{ if in (slice "features" "pricing" "steps" "faq" "map" "cta-card") $block_type }}
+    {{ partial "components/block-fallback.html" (dict "type" $block_type "content" $block.content) }}
   {{ end }}
 </div>
 

@@ -140,10 +140,14 @@
 {{- $entities := slice -}}
 {{- range $faq -}}
   {{- $q := .question | default "" -}}
-  {{- $a := .answer | default "" -}}
-  {{- if and (not (strings.Contains $q "TODO_")) (not (strings.Contains $a "TODO_")) -}}
-    {{- $entities = $entities | append (dict "@type" "Question" "name" $q "acceptedAnswer" (dict "@type" "Answer" "text" ($a | plainify | replaceRE `\*+` ""))) -}}
-  {{- end -}}
+    {{- $a := .answer | default "" -}}
+    {{- if and (not (strings.Contains $q "TODO_")) (not (strings.Contains $a "TODO_")) -}}
+      {{/* Answers are markdown and may contain `[label](/path/)`. Structured data
+           takes plain text, so keep the label and drop the markdown link target —
+           otherwise the SERP FAQ answer renders literal `[label](/path/)`. */}}
+      {{- $aText := $a | replaceRE `\[([^\]]+)\]\([^)]*\)` "$1" | plainify | replaceRE `\*+` "" -}}
+      {{- $entities = $entities | append (dict "@type" "Question" "name" ($q | replaceRE `\*+` "") "acceptedAnswer" (dict "@type" "Answer" "text" $aText)) -}}
+    {{- end -}}
 {{- end -}}
 {{- if $entities -}}
   {{- $graph = $graph | append (dict "@type" "FAQPage" "@id" (printf "%s#faq" $page.Permalink) "mainEntity" $entities) -}}

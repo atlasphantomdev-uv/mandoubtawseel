@@ -1,0 +1,46 @@
+{{/* Recursively rewrite root-relative URLs inside a block's `content` map so
+     Preact-rendered blocks emit links that survive a sub-path deployment.
+
+     Why this exists (measured on the deployed site, 2026-10-25):
+     blox components render `href={props.content...url}` verbatim, and only
+     `blox/map` re-applies `data-hbb-relurl` from <html> at runtime. So on
+     `.../mandoubtawseel/…` every other block link pointed at the domain root:
+     `/اتصل-بنا/`, `/وظائف-مندوب-توصيل/`, `/خطوط-التوصيل/…` → curl returned 404.
+     On /مندوب-توصيل-في-دبي/ that was 9 of 47 internal links (CTA buttons +
+     FAQ links + `/`). Rewriting here fixes every block at once instead of
+     patching each component.
+
+     `map` is excluded by the caller: its own JS prefixes marker URLs, so
+     rewriting twice would double the base path.
+
+     ponytail: drop this when blox components start applying relURL themselves. */}}
+{{ $v := .v }}
+{{ $prefix := .prefix }}
+{{ $out := $v }}
+
+{{ if eq $prefix "/" }}
+  {{/* Deployed at the domain root — nothing to prefix. */}}
+{{ else if reflect.IsMap $v }}
+  {{ $m := dict }}
+  {{ range $k, $val := $v }}
+    {{ $m = merge $m (dict $k (partial "functions/relurl-deep.html" (dict "v" $val "prefix" $prefix))) }}
+  {{ end }}
+  {{ $out = $m }}
+{{ else if reflect.IsSlice $v }}
+  {{ $s := slice }}
+  {{ range $v }}
+    {{ $s = $s | append (partial "functions/relurl-deep.html" (dict "v" . "prefix" $prefix)) }}
+  {{ end }}
+  {{ $out = $s }}
+{{ else if eq (printf "%T" $v) "string" }}
+  {{ $s := $v }}
+  {{/* Whole-value URL, e.g. `url: /اتصل-بنا/`. */}}
+  {{ if and (hasPrefix $s "/") (not (hasPrefix $s "//")) (not (hasPrefix $s $prefix)) }}
+    {{ $s = printf "%s%s" $prefix (strings.TrimPrefix "/" $s) }}
+  {{ end }}
+  {{/* Markdown link inside prose, e.g. FAQ answers: `[خط دبي](/خطوط-التوصيل/…)`. */}}
+  {{ $s = replaceRE `\]\(/` (printf "](%s" $prefix) $s }}
+  {{ $out = $s }}
+{{ end }}
+
+{{ return $out }}

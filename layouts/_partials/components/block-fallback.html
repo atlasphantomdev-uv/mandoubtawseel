@@ -1,0 +1,132 @@
+{{/* Server-side, no-JS fallback for a Preact-rendered Hugo Blox block.
+
+     Why this exists (measured 2026-10-25): every Preact block ships its copy
+     ONLY as JSON inside `data-props`, so the initial HTML of a landing page
+     carried nothing but nav, hero and footer — the deployed /مندوب-توصيل-في-دبي/
+     had 255 words in the raw response versus 771 after hydration. Clients that
+     do not execute JS (GPTBot, ClaudeBot, PerplexityBot, CCBot, LinkedIn/Slack
+     unfurlers, text browsers) therefore saw a page with no services, no prices,
+     no FAQ and no internal links.
+
+     The markup is emitted INSIDE the block container and wrapped in <noscript>:
+       - <noscript> is inert when JS is on → no layout shift, no visual change;
+       - blox `client.jsx` calls preact render(), which REPLACES container
+         children on mount → the fallback leaves the live DOM entirely, so
+         JS-rendering crawlers see exactly one copy of the content.
+
+     Only text-bearing blocks are handled; `markdown` and `contact-info` are
+     already server-rendered by their own block.html. */}}
+{{ $type := .type }}
+{{ $c := .content | default dict }}
+{{/* NB: Hugo's relURL drops the base path for non-ASCII paths (verified on this
+     repo's /مندوب-…/ URLs — see components/coverage-links.html), so build the
+     prefix from the site root and concatenate explicitly. */}}
+{{ $base := "" | relURL }}
+
+<noscript>
+  <div class="mx-auto max-w-4xl px-4 py-10 text-base leading-7">
+
+    {{ if eq $type "features" }}
+      {{ with $c.title }}<h2 class="mb-4 text-2xl font-bold">{{ . | plainify }}</h2>{{ end }}
+      {{ with $c.text }}<p class="mb-6">{{ . | plainify }}</p>{{ end }}
+      <ul class="space-y-4">
+        {{ range $c.items }}
+          <li>
+            {{ with .name }}<h3 class="text-lg font-semibold">{{ . | plainify }}</h3>{{ end }}
+            {{ with .description }}<p>{{ . | plainify }}</p>{{ end }}
+          </li>
+        {{ end }}
+      </ul>
+
+    {{ else if eq $type "pricing" }}
+      {{ with $c.title }}<h2 class="mb-4 text-2xl font-bold">{{ . | plainify }}</h2>{{ end }}
+      {{ with $c.subtitle }}<p class="mb-6">{{ . | plainify }}</p>{{ end }}
+      <ul class="space-y-6">
+        {{ range $c.tiers }}
+          <li>
+            {{ with .name }}<h3 class="text-lg font-semibold">{{ . | plainify }}</h3>{{ end }}
+            {{ with .price_note }}<p>{{ . | plainify }}</p>{{ end }}
+            {{ with .description }}<p>{{ . | plainify }}</p>{{ end }}
+            {{ with .features }}
+              <ul class="list-disc space-y-1 ps-6">
+                {{ range . }}<li>{{ . | plainify }}</li>{{ end }}
+              </ul>
+            {{ end }}
+            {{ with .cta }}
+              {{ $cta := . }}
+              {{ with .url }}
+                {{ $href := cond (strings.HasPrefix . "http") . (printf "%s%s" $base (strings.TrimPrefix "/" .)) }}
+                <p><a class="underline" href="{{ $href }}">{{ with $cta.text }}{{ . | plainify }}{{ else }}اطلب التوصيل{{ end }}</a></p>
+              {{ end }}
+            {{ end }}
+          </li>
+        {{ end }}
+      </ul>
+
+    {{ else if eq $type "steps" }}
+      {{ with $c.title }}<h2 class="mb-4 text-2xl font-bold">{{ . | plainify }}</h2>{{ end }}
+      {{ with $c.text }}<p class="mb-6">{{ . | plainify }}</p>{{ end }}
+      <ol class="list-decimal space-y-4 ps-6">
+        {{ range $c.items }}
+          <li>
+            {{ with .title }}<h3 class="text-lg font-semibold">{{ . | plainify }}</h3>{{ end }}
+            {{ with .text }}<p>{{ . | plainify }}</p>{{ end }}
+          </li>
+        {{ end }}
+      </ol>
+
+    {{ else if eq $type "faq" }}
+      {{ with $c.title }}<h2 class="mb-4 text-2xl font-bold">{{ . | plainify }}</h2>{{ end }}
+      <dl class="space-y-4">
+        {{ range $c.items }}
+          <div>
+            {{ with .question }}<dt class="text-lg font-semibold">{{ . | plainify }}</dt>{{ end }}
+            {{ with .answer }}
+              {{/* `markdownify` runs the site's render-link hook, which applies the
+                   base path, so the result is safe to emit as-is. It must stay
+                   template.HTML: piping it through `replaceRE` (the previous
+                   approach) turned the rendered <strong>/<a> markup into escaped
+                   text and prefixed links twice. */}}
+              <dd>{{ . | markdownify }}</dd>
+            {{ end }}
+          </div>
+        {{ end }}
+      </dl>
+      {{ with $c.button }}
+        {{ $btn := . }}
+        {{ with .url }}
+          {{ $href := cond (strings.HasPrefix . "http") . (printf "%s%s" $base (strings.TrimPrefix "/" .)) }}
+          <p class="mt-6"><a class="underline" href="{{ $href }}">{{ with $btn.text }}{{ . | plainify }}{{ else }}اطلب مندوبك الآن{{ end }}</a></p>
+        {{ end }}
+      {{ end }}
+
+    {{ else if eq $type "map" }}
+      {{ with $c.title }}<h2 class="mb-4 text-2xl font-bold">{{ . | plainify }}</h2>{{ end }}
+      {{ with $c.subtitle }}<p class="mb-6">{{ . | plainify }}</p>{{ end }}
+      <ul class="list-disc space-y-2 ps-6">
+        {{ range $c.markers }}
+          {{ $marker := . }}
+          <li>
+            {{ with .url }}
+              <a class="underline" href="{{ printf "%s%s" $base (strings.TrimPrefix "/" .) }}">{{ with $marker.title }}{{ . | plainify }}{{ end }}</a>
+            {{ else }}
+              {{ with .title }}{{ . | plainify }}{{ end }}
+            {{ end }}
+          </li>
+        {{ end }}
+      </ul>
+
+    {{ else if eq $type "cta-card" }}
+      {{ with $c.title }}<h2 class="mb-4 text-2xl font-bold">{{ . | plainify }}</h2>{{ end }}
+      {{ with $c.text }}<p class="mb-6">{{ . | plainify }}</p>{{ end }}
+      {{ with $c.button }}
+        {{ $btn := . }}
+        {{ with .url }}
+          {{ $href := cond (strings.HasPrefix . "http") . (printf "%s%s" $base (strings.TrimPrefix "/" .)) }}
+          <p><a class="underline" href="{{ $href }}">{{ with $btn.text }}{{ . | plainify }}{{ end }}</a></p>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+
+  </div>
+</noscript>
