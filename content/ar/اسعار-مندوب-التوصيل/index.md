@@ -12,6 +12,11 @@ keywords:
 type: landing
 translationKey: pricing
 date: 2026-10-14
+# Feeds the Service > offers (AggregateOffer) node in the JSON-LD graph.
+# Only the client-approved "from AED 15" floor exists, so this is a lowPrice.
+offer:
+  currency: AED
+  low_price: 15
 
 # Surface contract (never two adjacent dark blocks):
 #   hero -> surface-dark · price basis -> surface-page · tiers -> surface-page

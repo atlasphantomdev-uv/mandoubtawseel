@@ -95,7 +95,11 @@ jobs:
     - name: Submit URLs to IndexNow
       continue-on-error: true
       run: |
-        BASE="https://atlasphantomdev-uv.github.io/mandoubtawseel"
+        # Derived from the deploy, not hard-coded: when a custom domain is bound,
+        # page_url follows it and IndexNow keeps pointing at the live host.
+        BASE="${{ steps.deployment.outputs.page_url }}"
+        BASE="${BASE%/}"
+        echo "IndexNow base: $BASE"
         KEY_FILE=$(ls static/*.txt | head -1)
         KEY=$(basename "$KEY_FILE" .txt)
         for path in "" "en/" "مندوب-توصيل-في-دبي/" "مندوب-توصيل-في-ابوظبي/" \

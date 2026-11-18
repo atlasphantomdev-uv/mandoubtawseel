@@ -23,6 +23,20 @@ def attr(html: str, pattern: str) -> str | None:
     return m.group(1) if m else None
 
 
+def _walk_nulls(node, path: str = ""):
+    """Yield (key, value) pairs whose value is None, at any depth."""
+    if isinstance(node, dict):
+        for k, v in node.items():
+            p = f"{path}.{k}" if path else k
+            if v is None:
+                yield (p, v)
+            else:
+                yield from _walk_nulls(v, p)
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            yield from _walk_nulls(v, f"{path}[{i}]")
+
+
 def main() -> int:
     pages = sorted(p for p in ROOT.rglob("index.html") if ALIAS not in p.read_text())
     if not pages:
@@ -50,15 +64,28 @@ def main() -> int:
         if not attr(html, r'name=description content="([^"]+)"'):
             warns.append(f"{rel}: no meta description")
 
-        for m in re.finditer(
-            r'<script type="application/ld\+json">(.*?)</script>', html, re.S
-        ):
+        # Minified output drops the attribute quotes, so match both forms —
+        # otherwise this whole block silently never runs in production builds.
+        ld_blocks = re.findall(
+            r'<script type="?application/ld\+json"?>(.*?)</script>', html, re.S
+        )
+        if not ld_blocks:
+            errors.append(f"{rel}: no JSON-LD block found")
+        for block in ld_blocks:
             try:
-                json.loads(m.group(1))
+                parsed = json.loads(block)
             except json.JSONDecodeError as exc:
                 errors.append(f"{rel}: invalid JSON-LD ({exc})")
-            if "TODO_" in m.group(1):
+                continue
+            if "TODO_" in block:
                 errors.append(f"{rel}: TODO_ placeholder inside JSON-LD")
+            # A null value (e.g. the old "logo": null) is invalid for consumers
+            # that expect a type — omit the property instead.
+            nulls = [k for k, v in _walk_nulls(parsed) if v is None]
+            if nulls:
+                errors.append(
+                    f"{rel}: null value(s) in JSON-LD: {', '.join(nulls[:3])}"
+                )
 
         langs = re.findall(r"hreflang=([a-z-]+) href=([^ >]+)", html)
         if langs:
@@ -78,6 +105,58 @@ def main() -> int:
                 for u in back
             ):
                 errors.append(f"{rel}: hreflang {lang} -> {target} not reciprocal")
+
+    # ── URL identity ────────────────────────────────────────────────────────
+    # relURL/relLangURL lowercase percent-escapes while .Permalink emits them
+    # uppercase, so a naive build links every Arabic slug to a different URL
+    # string than its own canonical. GitHub Pages is case-sensitive and serves
+    # both, which splits the crawl (measured 2026-11-18: 380 of 703 internal page
+    # links pointed at a non-canonical URL string). scripts/normalize_url_case.mjs
+    # collapses them; these two assertions keep it collapsed.
+    origin = ""
+    canon_paths: set[str] = set()
+    page_html: dict[str, str] = {}
+    for page in pages:
+        html = page.read_text()
+        rel = "/" + page.parent.relative_to(ROOT).as_posix().strip(".") + "/"
+        rel = rel.replace("//", "/")
+        page_html[rel] = html
+        m = re.search(r"rel=canonical href=([^ >]+)", html)
+        if m:
+            origin = origin or re.match(r"(https?://[^/]+)", m.group(1)).group(1)  # type: ignore[union-attr]
+            canon_paths.add("/" + m.group(1).split("://", 1)[-1].split("/", 1)[-1])
+
+    ASSET = re.compile(
+        r"\.(css|js|png|jpe?g|svg|webp|woff2?|xml|txt|webmanifest|ico|json|pdf)$", re.I
+    )
+    for rel, html in page_html.items():
+        bad_esc = [e for e in re.findall(r"%[0-9a-fA-F]{2}", html) if e != e.upper()]
+        if bad_esc:
+            errors.append(
+                f"{rel}: {len(bad_esc)} lowercase percent-escape(s), e.g. {bad_esc[0]}"
+            )
+        if rel.endswith("404/"):
+            continue
+        for href in set(re.findall(r'href="?([^" >]+)', html)):
+            if href.startswith(("#", "mailto:", "tel:")):
+                continue
+            if href.startswith("http"):
+                if origin and not href.startswith(origin):
+                    continue
+                path = "/" + href.split("://", 1)[-1].split("/", 1)[-1]
+            elif href.startswith("/"):
+                path = href
+            else:
+                continue
+            path = path.split("#")[0].split("?")[0]
+            if ASSET.search(path):
+                continue
+            if not path.endswith("/") and not path.endswith(".html"):
+                path += "/"
+            if path.endswith(".html"):
+                continue
+            if path not in canon_paths:
+                errors.append(f"{rel}: link {href} matches no page canonical")
 
     print(f"checked {len(pages)} HTML pages")
     for w in warns:

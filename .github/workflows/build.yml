@@ -134,6 +134,13 @@ jobs:
         echo "Hugo Cache Dir: $(hugo config | grep cachedir)"
         hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
+    # relURL/relLangURL emit lowercase percent-escapes while .Permalink emits
+    # uppercase, so every Arabic slug had two URL strings and Google spent half
+    # the crawl on the twins (32/60 pages "canonicalized to another URL").
+    # Uppercasing is RFC 3986 §2.1-neutral and collapses them to one URL.
+    - name: Normalize percent-encoding case in built HTML
+      run: node scripts/normalize_url_case.mjs public
+
     - name: Generate Pagefind search index (if applicable)
       run: |
         # Check if site uses Pagefind search

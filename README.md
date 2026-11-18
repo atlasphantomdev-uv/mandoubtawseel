@@ -199,21 +199,54 @@ grep -rho "TODO_[A-Z_]*" content config | sort | uniq -c   # expect no output
 ### Why the sub-path URL is a limit
 
 `github.io/…/mandoubtawseel/` cannot win Arabic brand queries the way a domain can.
-Moving to a custom domain is a `static/CNAME` + `baseURL` change plus DNS; canonicals,
-sitemap and hreflang follow automatically from `baseURL`/`configure-pages`.
+`github.io` is on the Public Suffix List, so this subfolder is a separate site with
+no shared authority, the host root (another repo) owns `robots.txt`, and the SERP
+shows the machine-generated URL. Nothing on-page fixes that.
+
+**Domain move — the switch is one line + DNS.** Everything below derives from the
+deployed base URL, so no source edit is needed beyond the custom domain:
+
+1. Add the domain in **Repo → Settings → Pages → Custom domain**. GitHub writes
+   `CNAME` into the repo and re-routes the project site from
+   `/mandoubtawseel/` to `/`.
+2. DNS: `A`/`AAAA` for the apex, or `CNAME` for `www`, per GitHub's Pages docs.
+3. `actions/configure-pages` starts returning the new base URL, so
+   `hugo --baseURL`, canonicals, `og:url`, hreflang, JSON-LD `@id`s, the sitemap
+   and `robots.txt`'s `Sitemap:` line all follow automatically.
+4. The deploy job's IndexNow ping reads `page_url` from the deploy step, so it
+   follows too — no hard-coded host left anywhere in the workflows.
+5. Then update the **root Pages repo** (`atlasphantomdev-uv.github.io`): drop its
+   `Sitemap:` lines (the new domain serves its own at `/`).
+6. GitHub Pages cannot 301. Keep the old `github.io/mandoubtawseel/` deployment
+   alive (or front it with a redirect rule on Cloudflare) so existing links and
+   any rankings transfer instead of 404ing.
+
+Do the move **before** investing further in content: at the time of writing the
+site had 0 referring domains and 7 clicks / 679 impressions in 28 days, so there
+is almost no equity to lose and every later link should land on the real domain.
 
 ---
 
 ## Verification
 
 ```bash
-hugo --minify                 # 0 errors, 0 warnings
-python3 scripts/seo_check.py  # 0 errors; warnings should be empty
+hugo --minify
+node scripts/normalize_url_case.mjs public   # uppercases %xx in built HTML
+python3 scripts/seo_check.py                 # 0 errors; warnings should be empty
 ```
 
 `seo_check.py` asserts, per built page: exactly one `<h1>`, a canonical, a meta
-description, parseable JSON-LD with no `TODO_`, and reciprocal `hreflang`.
-Exit code 1 means an indexing regression — do not deploy over it.
+description, parseable JSON-LD with no `TODO_` and no `null` values, reciprocal
+`hreflang`, no lowercase percent-escapes, and that **every internal page link
+resolves to a page's own canonical URL string**. Exit code 1 means an indexing
+regression — do not deploy over it.
+
+`normalize_url_case.mjs` is required, not optional: Hugo's `relURL`/`relLangURL`
+lowercase percent-escapes while `.Permalink` emits them uppercase, so without it
+each Arabic slug is linked under a second URL that GitHub Pages also serves with
+a 200. Measured before the fix: 380 of 703 internal page links pointed at a
+non-canonical URL string, and a 60-page crawl reported 32 pages "canonicalized to
+another URL". Run with `--check` to verify only.
 
 ---
 

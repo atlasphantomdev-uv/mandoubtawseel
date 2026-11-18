@@ -36,12 +36,34 @@
   "@type" "LocalBusiness"
   "@id" $businessID
   "url" $siteURL
-  "logo" $logo
   "areaServed" (dict "@type" "Country" "name" "United Arab Emirates")
   "priceRange" "AED 15+"
 -}}
 {{- with $name }}{{ $business = merge $business (dict "name" .) }}{{ end -}}
 {{- with $seoLocation.phone }}{{ $business = merge $business (dict "telephone" .) }}{{ end -}}
+
+{{/* logo: emit only when a real asset resolves. The theme helper returns nil for
+     this project, so the previous template shipped a literal "logo": null, which
+     Google's organisation/logo guidance rejects. The favicon mark is the real
+     brand asset and is already 512px. */}}
+{{- $logoURL := "" -}}
+{{- with $logo -}}
+  {{- $logoURL = . -}}
+{{- else -}}
+  {{- with resources.Get "media/icon.png" -}}{{- $logoURL = .Permalink -}}{{- end -}}
+{{- end -}}
+{{- with $logoURL }}{{ $business = merge $business (dict "logo" .) }}{{ end -}}
+
+{{/* geo + contactPoint: both come from hugoblox.seo.location, which holds real
+     configured values (Dubai coordinates, the WhatsApp number). Nothing is
+     invented — a missing key is omitted, not guessed. */}}
+{{- $coords := $seoLocation.coordinates | default dict -}}
+{{- if and $coords.latitude $coords.longitude -}}
+  {{- $business = merge $business (dict "geo" (dict "@type" "GeoCoordinates" "latitude" $coords.latitude "longitude" $coords.longitude)) -}}
+{{- end -}}
+{{- with $seoLocation.phone -}}
+  {{- $business = merge $business (dict "contactPoint" (dict "@type" "ContactPoint" "telephone" . "contactType" "customer service" "areaServed" "AE" "availableLanguage" (slice "ar" "en"))) -}}
+{{- end -}}
 {{- $postal := dict -}}
 {{- range $key, $value := dict
   "streetAddress" $addr.street
@@ -67,6 +89,22 @@
   "areaServed" $areaServed
   "availableLanguage" (slice "ar" "en")
 -}}
+
+{{/* Price offering on pages that declare one in front matter. Only the
+     client-approved "from AED 15" floor exists, so it is modelled as an
+     AggregateOffer lowPrice rather than a single fixed price. */}}
+{{- with $page.Params.offer -}}
+  {{- $off := dict
+    "@type" "AggregateOffer"
+    "@id" (printf "%s#offer" $page.Permalink)
+    "priceCurrency" (.currency | default "AED")
+    "lowPrice" .low_price
+    "availability" "https://schema.org/InStock"
+    "url" $page.Permalink
+    "seller" (dict "@id" $businessID)
+  -}}
+  {{- $service = merge $service (dict "offers" $off) -}}
+{{- end -}}
 
 {{- $webpage := dict
   "@type" "WebPage"
